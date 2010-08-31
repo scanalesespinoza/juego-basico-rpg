@@ -4,6 +4,7 @@
  */
 package clases;
 
+import extensiones.StdDungeonMonster;
 import jgame.JGColor;
 import jgame.JGFont;
 import jgame.JGPoint;
@@ -18,7 +19,7 @@ public class Manager extends JGEngine {
     public Personaje pj;
     public StdDungeonMonster casa;
     public static void main(String[] args) {
-        new Manager(new JGPoint(800, 768));
+        new Manager(new JGPoint(800, 600));
     }
 
     /** Application constructor. */
@@ -39,8 +40,6 @@ public class Manager extends JGEngine {
 
     public void initGame() {
         setFrameRate(60, 2);
-        
-
         defineMedia("/media/rpg.tbl");
         setBGImage("mybackground");
         setMsgFont(new JGFont("Helvetica",0,32));
@@ -97,10 +96,10 @@ public class Manager extends JGEngine {
 
     @Override
     public void paintFrame() {
-       // drawString("click ("+getMouseX()+", "+getMouseY()+")", pfWidth()/2, 5, 0);
-        //drawString("pj: ("+pj.x+", "+pj.y+")", pfWidth()/2, 5, 0);
+        drawString("click ("+getMouseX()+", "+getMouseY()+")", pfWidth()/2, 5, 0);
+        drawString("pj: ("+pj.x+", "+pj.y+")", pfWidth()/2, pfHeight()-50, 0);
         drawRect(pfWidth()-100, 0, 100, pfHeight(), false, false);
-        drawRect(0, pfHeight()-90, pfWidth(), 100, false, false);
+        drawRect(0, pfHeight()-100, pfWidth(), 100, false, false);
        
     }
 

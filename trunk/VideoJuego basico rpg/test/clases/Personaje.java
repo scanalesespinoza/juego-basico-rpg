@@ -4,6 +4,7 @@
  */
 package clases;
 
+import extensiones.StdDungeonPlayer;
 import jgame.*;
 
 /**
