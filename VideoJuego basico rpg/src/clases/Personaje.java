@@ -4,13 +4,11 @@
  */
 package clases;
 
-import jgame.*;
-
 /**
  *
  * @author gerald
  */
-public class Personaje extends StdDungeonPlayer {
+public class Personaje extends extensiones.StdDungeonPlayer {
     // object cids: 1=player 2=monster 4=bullet 8=monsterbullet
 	public static final int WALL_T=1;
 	public static final int SHWALL_T=2; // shootable wall
@@ -127,6 +125,26 @@ public class Personaje extends StdDungeonPlayer {
     int prevxdir=1,prevydir=0;
     @Override
     public void move() {
+        if (eng.getMouseButton(1)){
+            //Obtengo posicion del mouse
+            double  mouseX = eng.getMouseX();
+            double  mouseY = eng.getMouseY();
+
+            /*limpio todas las  teclas que han sido presionadas*/
+            eng.clearKey(eng.KeyRight);
+            eng.clearKey(eng.KeyLeft);
+            eng.clearKey(eng.KeyUp);
+            eng.clearKey(eng.KeyDown);
+
+
+            if (mouseX > this.x ) {eng.setKey(eng.KeyRight);}
+            if (mouseX < this.x ) {eng.setKey(eng.KeyLeft);}
+            if (mouseY > this.y ) {eng.setKey(eng.KeyDown);}
+            if (mouseY < this.y ) {eng.setKey(eng.KeyUp);}
+
+            if ( mouseX == this.x){ eng.clearKey(eng.KeyRight); eng.clearKey(eng.KeyLeft);}
+            if ( mouseY == this.y){ eng.clearKey(eng.KeyUp); eng.clearKey(eng.KeyDown);}
+        }
         super.move();
     }
 }

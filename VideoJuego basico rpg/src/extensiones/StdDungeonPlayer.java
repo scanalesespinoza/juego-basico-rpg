@@ -1,5 +1,4 @@
-package clases;
-import clases.StdDungeonMonster;
+package extensiones;
 import jgame.*;
 
 /** A standard object that allows the player to move in 8 directions around a

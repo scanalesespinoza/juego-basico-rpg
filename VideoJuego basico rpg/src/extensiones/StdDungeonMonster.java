@@ -1,4 +1,4 @@
-package clases;
+package extensiones;
 
 import jgame.*;
 /** A standard monster object that can move in 8 directions around a
