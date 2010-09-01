@@ -140,13 +140,13 @@ public class Personaje extends extensiones.StdDungeonPlayer {
 
             //creo objeto JGRectangle para ver si llegó al punto deseado
             rClick = new JGRectangle((int)mouseX, (int)mouseY, entorno, entorno);
+
             this.estadoClick = true;
             eng.clearMouseButton(1);
         }
 
          if (estadoClick){
            
-
             /*limpio todas las  teclas que han sido presionadas*/
             eng.clearKey(eng.KeyRight);
             eng.clearKey(eng.KeyLeft);
@@ -154,21 +154,20 @@ public class Personaje extends extensiones.StdDungeonPlayer {
             eng.clearKey(eng.KeyDown);
 
 
-            if ( this.x < mouseX ) {eng.setKey(eng.KeyRight);}
-            if ( this.x > mouseX ) {eng.setKey(eng.KeyLeft);}
-            if ( this.y < mouseY ) {eng.setKey(eng.KeyDown);}
-            if ( this.y > mouseY ) {eng.setKey(eng.KeyUp);}
+            if ( this.x < mouseX - entorno) {eng.setKey(eng.KeyRight);}
+            if ( this.x > mouseX + entorno) {eng.setKey(eng.KeyLeft);}
+            if ( this.y < mouseY - entorno) {eng.setKey(eng.KeyDown);}
+            if ( this.y > mouseY + entorno) {eng.setKey(eng.KeyUp);}
            
             
-            if (rClick.intersects(this.getTileBBox())){
+            if (rClick.intersects(this.getTileBBox()) || eng.getMouseButton(3) ){
                 eng.clearKey(eng.KeyRight);
                 eng.clearKey(eng.KeyLeft);
                 eng.clearKey(eng.KeyUp);
                 eng.clearKey(eng.KeyDown);
+                eng.clearMouseButton(3);
                 estadoClick = false;
-                
             }
-            this.msg =  rClick.x +"--"+rClick.y + "|| "+rClick.width +"--"+ rClick.height;
         }
         super.move();
     }

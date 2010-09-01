@@ -37,7 +37,7 @@ human_l		human_l0;human_l1;human_l2;human_l3;human_l4;human_l5;human_l6;human_l7
 human_r		human_r0;human_r1;human_r2;human_r3;human_r4;human_r5;human_r6;human_r7;human_r8;human_r9;human_r10;human_r11;human_r12		0.3		-
 
 // define image to display as background
-mybackground	-	0	/media/imagenes/tiles/adoquines2.gif	-
+mybackground	-	0	/media/imagenes/tiles/adoquines2.gif 	-
 
 explo_0		x	0	explo_map	0	-
 explo_1		x	0	explo_map	1	-
@@ -46,7 +46,10 @@ explo_2		x	0	explo_map	2	-
 explo	explo_0;explo_1;explo_2		0.3
 
 //definiendo el pastito
-pasto   #   1   /media/imagenes/tiles/pasto_32x32.png   -
+//pasto   #   1   /media/imagenes/tiles/pasto_32x32.png   -
+
+// define the tiles used in example 4
+mytile  #   0   /media/imagenes/tiles/marble16.gif  -
 
 // "null" indicates the null image, which will show as a transparent tile
-emptytile	.	0	/media/imagenes/tiles/pasto_32x32.png			-
+emptytile   .   0   null    -

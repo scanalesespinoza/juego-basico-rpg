@@ -40,7 +40,7 @@ public class Manager extends JGEngine {
     }
 
     public void initGame() {
-        setFrameRate(20, 2);
+        setFrameRate(60, 2);
         defineMedia("/media/rpg.tbl");
         setBGImage("mybackground");
         setMsgFont(new JGFont("Helvetica",0,32));
@@ -55,7 +55,7 @@ public class Manager extends JGEngine {
         setTiles(
                 2, // tile x index
                 2, // tile y index
-                new String[]{".", "."} // A series of tiles. Each String represents a line of tiles.
+                new String[]{"####", "#"} // A series of tiles. Each String represents a line of tiles.
                 );
 /*
         setTiles(13, 2, new String[]{"#####", "....#", "....#", "....#"});
@@ -100,8 +100,8 @@ public class Manager extends JGEngine {
         drawString("click ("+getMouseX()+", "+getMouseY()+")", pfWidth()/2, 5, 0);
         drawString("pj: ("+pj.x+", "+pj.y+") ", pfWidth()/2, pfHeight()-50, 0);
         //drawString( pj.msg, pfWidth()/2, pfHeight()/2, 0);
-        drawRect(pj.rClick.x, pj.rClick.y, pj.rClick.width, pj.rClick.height, false, false);
-        drawRect(pj.getBBox().x, pj.getBBox().y, pj.getBBox().width, pj.getBBox().height, false, false);
+        // drawRect(pj.rClick.x, pj.rClick.y, pj.rClick.width, pj.rClick.height, false, false);
+        //drawRect(pj.getBBox().x, pj.getBBox().y, pj.getBBox().width, pj.getBBox().height, false, false);
         drawRect(pfWidth()-100, 0, 100, pfHeight(), false, false);
         drawRect(0, pfHeight()-100, pfWidth(), 100, false, false);
        
