@@ -42,16 +42,24 @@ public class Manager extends JGEngine {
     public void initGame() {
         setFrameRate(60, 2);
         defineMedia("/media/rpg.tbl");
-        setBGImage("mybackground");
+        defineImage("bgimage","-",0,"/media/imagenes/tiles/adoquines2.gif","-");
+        setBGImage("bgimage");
         setMsgFont(new JGFont("Helvetica",0,32));
 
+        setPFSize(80,60);//ventana de juego
+        setPFWrap(
+                false, // horizontal wrap
+                false,  // vertical wrap
+                -10, -10 // shift the center of the view to make objects wrap at
+                       // the right moment (sprite size / 2).
+        );
         /* Busca Personaje segun idPersonaje*/
-       
+
         pj = new Personaje(pfWidth()/2, pfHeight()/2, 1, KeyUp, KeyDown, KeyLeft, KeyRight);
         casa = new CasaUno(-400,-200);
 
         // create some tiles. "#" is our marble tile, "." is an empty space.
-        
+
         setTiles(
                 2, // tile x index
                 2, // tile y index
@@ -68,16 +76,19 @@ public class Manager extends JGEngine {
                 2, // tile cid found out of playfield bounds
                 0 // which cids to preserve when setting a tile (not used here).
                 );*/
-        
+
 
     }
-    
+
     public class CasaUno extends StdDungeonMonster {
             public CasaUno(double x,double y) {
                     super("casa",true,x,y,4,"explo",685);
                     if (isMidlet()) this.expiry = suspend_off_view;
             }
     }
+
+    /** View offset. */
+    int xofs=0,yofs=0;
 
     @Override
     public void doFrame() {
@@ -93,6 +104,24 @@ public class Manager extends JGEngine {
                 1 + 2, // collide with the marble and border tiles
                 1 // cids of our objects
                 );
+                int posX = (int) pj.x;
+                int posY = (int) pj.y;
+
+		xofs =  posX;
+		// the Y offset changes proportional to the offset of the mouse
+		// position from the center of the window.  If the mouse is in the
+		// center, we don't scroll, if it is close to the upper or lower
+		// border of the window, it scrolls quickly in that direction.
+		yofs = posY;
+		// Set the view offset.  Note that if our offset is out of the
+		// playfield bounds, the position is clipped so that it is inside.
+		// (this is only relevant for non-wrappable axes; a wrappable
+		// axis is never out of bounds!)
+		setViewOffset(
+			xofs,yofs, // the position within the playfield
+			true       // true means the given position is center of the view,
+			           // false means it is topleft.
+		);
     }
 
     @Override
@@ -104,7 +133,7 @@ public class Manager extends JGEngine {
         //drawRect(pj.getBBox().x, pj.getBBox().y, pj.getBBox().width, pj.getBBox().height, false, false);
         drawRect(pfWidth()-100, 0, 100, pfHeight(), false, false);
         drawRect(0, pfHeight()-100, pfWidth(), 100, false, false);
-       
+
     }
 
     
