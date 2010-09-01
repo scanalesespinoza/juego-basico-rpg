@@ -4,6 +4,8 @@
  */
 package clases;
 
+import jgame.JGRectangle;
+
 /**
  *
  * @author gerald
@@ -31,7 +33,11 @@ public class Personaje extends extensiones.StdDungeonPlayer {
     private short posicionX;
     private short posicionY;
     private String tipo;
-
+    public  String msg="";
+    public  JGRectangle rClick;
+    public boolean estadoClick;
+    double mouseX;
+        double mouseY;
     public Personaje(double x, double y, double speed, int upkey, int downkey,int leftkey, int rightkey) {
         super("player", x, y, 1, "human_l", false, false,
                 PLAYERBLOCK_T, PLAYER_T, 2.3,
@@ -125,10 +131,21 @@ public class Personaje extends extensiones.StdDungeonPlayer {
     int prevxdir=1,prevydir=0;
     @Override
     public void move() {
+        
+        int entorno=16;
         if (eng.getMouseButton(1)){
             //Obtengo posicion del mouse
-            double  mouseX = eng.getMouseX();
-            double  mouseY = eng.getMouseY();
+            mouseX = eng.getMouseX();
+            mouseY = eng.getMouseY();
+
+            //creo objeto JGRectangle para ver si llegó al punto deseado
+            rClick = new JGRectangle((int)mouseX, (int)mouseY, entorno, entorno);
+            this.estadoClick = true;
+            eng.clearMouseButton(1);
+        }
+
+         if (estadoClick){
+           
 
             /*limpio todas las  teclas que han sido presionadas*/
             eng.clearKey(eng.KeyRight);
@@ -137,13 +154,21 @@ public class Personaje extends extensiones.StdDungeonPlayer {
             eng.clearKey(eng.KeyDown);
 
 
-            if (mouseX > this.x ) {eng.setKey(eng.KeyRight);}
-            if (mouseX < this.x ) {eng.setKey(eng.KeyLeft);}
-            if (mouseY > this.y ) {eng.setKey(eng.KeyDown);}
-            if (mouseY < this.y ) {eng.setKey(eng.KeyUp);}
-
-            if ( mouseX == this.x){ eng.clearKey(eng.KeyRight); eng.clearKey(eng.KeyLeft);}
-            if ( mouseY == this.y){ eng.clearKey(eng.KeyUp); eng.clearKey(eng.KeyDown);}
+            if ( this.x < mouseX ) {eng.setKey(eng.KeyRight);}
+            if ( this.x > mouseX ) {eng.setKey(eng.KeyLeft);}
+            if ( this.y < mouseY ) {eng.setKey(eng.KeyDown);}
+            if ( this.y > mouseY ) {eng.setKey(eng.KeyUp);}
+           
+            
+            if (rClick.intersects(this.getTileBBox())){
+                eng.clearKey(eng.KeyRight);
+                eng.clearKey(eng.KeyLeft);
+                eng.clearKey(eng.KeyUp);
+                eng.clearKey(eng.KeyDown);
+                estadoClick = false;
+                
+            }
+            this.msg =  rClick.x +"--"+rClick.y + "|| "+rClick.width +"--"+ rClick.height;
         }
         super.move();
     }

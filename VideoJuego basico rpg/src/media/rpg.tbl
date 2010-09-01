@@ -44,3 +44,9 @@ explo_1		x	0	explo_map	1	-
 explo_2		x	0	explo_map	2	-
 
 explo	explo_0;explo_1;explo_2		0.3
+
+//definiendo el pastito
+pasto   #   1   /media/imagenes/tiles/pasto_32x32.png   -
+
+// "null" indicates the null image, which will show as a transparent tile
+emptytile	.	0	/media/imagenes/tiles/pasto_32x32.png			-
