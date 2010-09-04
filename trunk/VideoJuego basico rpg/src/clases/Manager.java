@@ -16,7 +16,7 @@ import jgame.platform.JGEngine;
  * @author gerald
  */
 public class Manager extends JGEngine {
-    public Personaje pj;
+    public PersonajeV2 pj;
     public StdDungeonMonster casa;
     public String msg;
     public static void main(String[] args) {
@@ -53,9 +53,9 @@ public class Manager extends JGEngine {
                 -10, -10 // shift the center of the view to make objects wrap at
                        // the right moment (sprite size / 2).
         );
-        /* Busca Personaje segun idPersonaje*/
+        
 
-        pj = new Personaje(pfWidth()/2, pfHeight()/2, 1, KeyUp, KeyDown, KeyLeft, KeyRight);
+        pj = new PersonajeV2(160, 160, 1);
         casa = new CasaUno(-400,-200);
 
         // create some tiles. "#" is our marble tile, "." is an empty space.
@@ -126,13 +126,14 @@ public class Manager extends JGEngine {
 
     @Override
     public void paintFrame() {
-        drawString("click ("+getMouseX()+", "+getMouseY()+")", pfWidth()/2, 5, 0);
-        drawString("pj: ("+pj.x+", "+pj.y+") ", pfWidth()/2, pfHeight()-50, 0);
+        //drawString("click ("+getMouseX()+", "+getMouseY()+")", 200, 30, 0);
+        //drawString("pj: ("+pj.x+", "+pj.y+") ", 200, 5, 0);
+        //drawString("clickJGPOINT ("+pj.mouse.x+", "+pj.mouse.y+")", 200, 80, 0);
         //drawString( pj.msg, pfWidth()/2, pfHeight()/2, 0);
         // drawRect(pj.rClick.x, pj.rClick.y, pj.rClick.width, pj.rClick.height, false, false);
         //drawRect(pj.getBBox().x, pj.getBBox().y, pj.getBBox().width, pj.getBBox().height, false, false);
-        drawRect(pfWidth()-100, 0, 100, pfHeight(), false, false);
-        drawRect(0, pfHeight()-100, pfWidth(), 100, false, false);
+        //drawRect(pfWidth()-100, 0, 100, pfHeight(), false, false);
+        //drawRect(0, pfHeight()-100, pfWidth(), 100, false, false);
 
     }
 
