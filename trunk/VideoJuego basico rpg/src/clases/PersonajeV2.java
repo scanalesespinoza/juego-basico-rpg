@@ -39,7 +39,10 @@ public class PersonajeV2 extends extensiones.StdDungeonPlayerV2 {
     public boolean estadoClick = false;
     double mouseX;
     double mouseY;
-    JGPoint mouse;
+    //factor es para convertir el punto del mouse de 800*600 a 1280*960 
+    //proporcionalmente para que se desplace de forma correcta
+    double factor =  1.6;
+   
 
     public PersonajeV2(double x, double y, double speed) {
         super("player", x, y, 1, "human_l", false, false,
@@ -142,9 +145,9 @@ public class PersonajeV2 extends extensiones.StdDungeonPlayerV2 {
         int entorno = 16; //variable para formar cuadrados a partir de un punto.
         if (eng.getMouseButton(1)) {
             //Obtengo posicion del mouse
-            mouseX = eng.getMouseX();
-            mouseY = eng.getMouseY();
-            mouse = eng.getMousePos();
+            mouseX = eng.getMouseX() + eng.viewXOfs();
+            mouseY = eng.getMouseY() + eng.viewYOfs();
+           
 
             //creo objeto JGRectangle para ver si llegó al punto deseado
             rClick = new JGRectangle((int) mouseX, (int) mouseY, entorno, entorno);
