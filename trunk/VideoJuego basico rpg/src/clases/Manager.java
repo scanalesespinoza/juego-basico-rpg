@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package clases;
 
 import extensiones.StdDungeonMonster;
@@ -16,7 +12,7 @@ import jgame.platform.JGEngine;
  * @author gerald
  */
 public class Manager extends JGEngine {
-    public PersonajeV2 pj;
+    public Jugador pj;
     public StdDungeonMonster casa;
     public String msg;
     public static void main(String[] args) {
@@ -47,25 +43,17 @@ public class Manager extends JGEngine {
         //setMsgFont(new JGFont("Helvetica",0,32));
         setFont(new JGFont("Arial", 0, 20));
         setPFSize(80,60);//ventana de juego
-        setPFWrap(
-                false, // horizontal wrap
-                false,  // vertical wrap
-                -10, -10 // shift the center of the view to make objects wrap at
-                       // the right moment (sprite size / 2).
-        );
         
-
-        pj = new PersonajeV2(200,200 , 1);
+        pj = new Jugador(200,200 , 1);
         casa = new CasaUno(-400,-200);
 
         // create some tiles. "#" is our marble tile, "." is an empty space.
-
+        /*
         setTiles(
                 2, // tile x index
                 2, // tile y index
                 new String[]{"####", "#"} // A series of tiles. Each String represents a line of tiles.
                 );
-/*
         setTiles(13, 2, new String[]{"#####", "....#", "....#", "....#"});
         setTiles(13, 9, new String[]{"....#", "....#", "....#", "#####"});
 
@@ -108,35 +96,16 @@ public class Manager extends JGEngine {
         int posY = (int) pj.y;
 
         xofs =  posX;
-        // the Y offset changes proportional to the offset of the mouse
-        // position from the center of the window.  If the mouse is in the
-        // center, we don't scroll, if it is close to the upper or lower
-        // border of the window, it scrolls quickly in that direction.
         yofs = posY;
-        // Set the view offset.  Note that if our offset is out of the
-        // playfield bounds, the position is clipped so that it is inside.
-        // (this is only relevant for non-wrappable axes; a wrappable
-        // axis is never out of bounds!)
         setViewOffset(
-                xofs,yofs, // the position within the playfield
-                true    // true means the given position is center of the view,
-                           // false means it is topleft.
-        );
+                xofs,yofs,
+                true   
+         );
 
     }
 
     @Override
-    public void paintFrame() {
-        drawString( "Clicl offset ("+pj.mouseX+","+pj.mouseY+")", viewWidth()/2, viewHeight()-80, 0);
-        drawString( "view ofs ("+viewXOfs()+","+viewYOfs()+")", viewWidth()/2, viewHeight()/2, 0);
-        drawString( "PJ offset ("+pj.x+","+pj.y+")", viewWidth()/2, 100, 0);
-       // drawString( "viewWidth="+viewWidth()+", viewH"+viewHeight()+", pfW= "+pfWidth()+", pfH="+pfHeight(), viewWidth()/2, viewHeight()/2, 0);
-         drawRect(pj.rClick.x, pj.rClick.y, pj.rClick.width, pj.rClick.height, false, false);
-        drawRect(pj.getBBox().x, pj.getBBox().y, pj.getBBox().width, pj.getBBox().height, false, false);
-        drawRect(viewWidth()-100, 0, 100, viewHeight(), false, false);
-        drawRect(0, viewHeight()-100, viewWidth(), 100, false, false);
-
-    }
+    public void paintFrame() {}
 
     
 }
