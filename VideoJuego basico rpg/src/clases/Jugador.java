@@ -1,7 +1,10 @@
 package clases;
 
 import java.sql.Date;
+import jgame.JGObject;
 import jgame.JGRectangle;
+import jgame.platform.JGEngine;
+import sun.java2d.loops.DrawRect;
 
 /**
  *
@@ -25,6 +28,9 @@ public class Jugador extends Personaje {
     private Date fechaCreacion;
     private boolean esBaneado;
     private short idCuenta;
+    private boolean ausente = false;
+
+
 
     @Override
     public void move() {
@@ -33,13 +39,16 @@ public class Jugador extends Personaje {
         setbLeftkey(false);
         setbRightkey(false);
         setbUpkey(false);
-
+        
         int entorno = 16; //variable para formar cuadrados a partir de un punto.
         if (eng.getMouseButton(1)) {
             //Obtengo posicion del mouse
             mouseX = eng.getMouseX() + eng.viewXOfs();
             mouseY = eng.getMouseY() + eng.viewYOfs();
 
+            if(ausente){
+                return;
+            }
 
             //creo objeto JGRectangle para ver si llegó al punto deseado
             rClick = new JGRectangle((int) mouseX, (int) mouseY, entorno, entorno);
@@ -96,4 +105,21 @@ public class Jugador extends Personaje {
         }
         super.desplazar();
     }
+
+    @Override
+    public void hit(JGObject obj) {
+        remove();
+        setAusente(true);
+    }
+
+    public boolean isAusente() {
+        return ausente;
+    }
+
+    public void setAusente(boolean ausente) {
+        this.ausente = ausente;
+    }
+
+
+
 }

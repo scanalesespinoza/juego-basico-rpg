@@ -1,7 +1,8 @@
 splash_image	x	0	/media/imagenes/logos/hack-logo-sm-midp.jpg	-
 
 all_map		/media/imagenes/personaje/front_111.gif		0	0	36	111	0	0
-explo_map	/media/imagenes/tiles/casa1.gif		0	0	697	493	0	0
+casa1_map	/media/imagenes/tiles/casa1.gif		0	0	192	100	0	0
+casa1Npc_map    /media/imagenes/personaje/homero_enojado.png    0       400     236     0       0
 
 human_l0	x	0	all_map	0		x	0	0	36	111
 human_l1	x	0	all_map	1		x	0	0	36	111
@@ -36,14 +37,20 @@ human_r12	x	0	all_map	12		x	0	0	36	111
 human_l		human_l0;human_l1;human_l2;human_l3;human_l4;human_l5;human_l6;human_l7;human_l8;human_l9;human_l10;human_l11;human_l12		0.3
 human_r		human_r0;human_r1;human_r2;human_r3;human_r4;human_r5;human_r6;human_r7;human_r8;human_r9;human_r10;human_r11;human_r12		0.3		-
 
-explo_0		x	0	explo_map	0	-
-explo_1		x	0	explo_map	1	-
-explo_2		x	0	explo_map	2	-
+casa1_0		x	0	casa1_map	0	-
+casa1_1		x	0	casa1_map	0	-
+casa1_2		x	0	casa1_map	0	-
 
-explo	explo_0;explo_1;explo_2		0.3
+casa1Npc_0		x	0	casa1Npc_map	0	-
+casa1Npc_1		x	0	casa1Npc_map	0	-
+casa1Npc_2		x	0	casa1Npc_map	0	-
 
-//definiendo el pastito
-//pasto   #   1   /media/imagenes/tiles/pasto_32x32.png   -
+casa1	casa1_0;casa1_1;casa1_2		0.3
+
+casa1Npc	casa1Npc_0;casa1Npc_1;casa1Npc_2		0.3
+
+//definiendo los edificios
+casa2   c   1   /media/imagenes/tiles/casa2.png   -
 
 // define the tiles used in example 4
 mytile  #   0   /media/imagenes/tiles/marble16.gif  -
