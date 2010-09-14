@@ -11,6 +11,7 @@ import sun.java2d.loops.DrawRect;
  * @author gerald
  */
 public class Jugador extends Personaje {
+    private JGRectangle rClick;
 
     public Jugador(double x, double y, double speed) {
         super(x, y,speed);

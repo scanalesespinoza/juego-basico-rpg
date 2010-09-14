@@ -3,6 +3,7 @@ package clases;
 import extensiones.StdDungeonMonster;
 import jgame.JGColor;
 import jgame.JGFont;
+import jgame.JGObject;
 import jgame.JGPoint;
 import jgame.platform.*;
 
@@ -25,6 +26,7 @@ public class Manager extends JGEngine {
     public Npc casa5Npc;
     public StdDungeonMonster casa;
     public String msg;
+    //public Arbol arb;
     public static void main(String[] args) {
         new Manager(new JGPoint(800, 600));
     }
@@ -61,10 +63,10 @@ public class Manager extends JGEngine {
         //setMsgFont(new JGFont("Helvetica",0,32));
         setFont(new JGFont("Arial", 0, 20));
         setPFSize(80,60);//ventana de juego
-        
+        defineImage("arbol", "A", 5, "/media/imagenes/tiles/Tree.png", "-");
         pj = new Jugador(400,400, 1);
-        casa1 = new Npc(680,672,"casa1","casa1",50,0);
-
+        //casa1 = new Npc(680,672,"casa1","casa1",50,0);
+        //arb = new Arbol(400, 300);
         // create some tiles. "#" is our marble tile, "." is an empty space.
 
         setTiles(
@@ -144,12 +146,7 @@ public class Manager extends JGEngine {
     }
 
 /*
-    public class CasaUno extends StdDungeonMonster {
-            public CasaUno(double x,double y) {
-                    super("casa",true,x,y,4,"explo",685);
-                    if (isMidlet()) this.expiry = suspend_off_view;
-            }
-    }
+    
 */
     /** View offset. */
     int xofs=0,yofs=0;
@@ -197,6 +194,43 @@ public class Manager extends JGEngine {
         setColor(JGColor.black);
 	setFont(new JGFont("Arial",0,20));
         drawString("Coordenada X: "+pj.x+" Coordenada Y: "+pj.y, pfWidth()/2, pfHeight()/2,  1, true);
+        drawRect(pj.getTileBBox().x, pj.getTileBBox().y, pj.getTileBBox().width, pj.getTileBBox().height, false, false);
     }
 }
+
+  /*  @Override
+    public void paintFrame() {
+        drawRect(viewXOfs()+500, viewYOfs(), viewWidth()-500, viewHeight(), false, false);
+        drawRect(viewXOfs(), viewYOfs()+400, viewWidth(), viewHeight()-400, false, false);
+
+        drawString("mensaje: "+arb.mensaje, viewWidth()/2, viewHeight()/2, 2);
+        drawRect(arb.x, arb.y, arb.getBBox().width, arb.getBBox().height, false, false);
+        drawRect(arb.click.x, arb.click.y, arb.click.width, arb.click.height, false, false);
+    }
+
+    public class CasaUno extends StdDungeonMonster {
+            public CasaUno(double x,double y) {
+                    super("casa",true,x,y,4,"explo",685);
+                    
+            }
+    }
+    public class Arbol extends StdDungeonMonster {
+            public Arbol(double x,double y) {
+                    super("arbol",true,x,y,5,"arbol",0);
+                    setBBox(0, 0, 64, 64);
+            }
+            public String mensaje= "no paso na";
+           public JGRectangle click;
+        @Override
+        public void hit(JGObject obj) {
+            mensaje = "chocaste";
+           
+           // click = new JGRectangle((int)(getMouseX()+viewXOfs()), (int)(getMouseY()+viewYOfs()),10,10);
+           
+            }
+        }
+
+
+    }
+    */
 

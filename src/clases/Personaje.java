@@ -33,8 +33,7 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     private String nombre;
     private short nivel;
     private String tipo;
-    public String msg = "";
-    public JGRectangle rClick;
+    
     public boolean estadoClick = false;
     double mouseX;
     double mouseY;

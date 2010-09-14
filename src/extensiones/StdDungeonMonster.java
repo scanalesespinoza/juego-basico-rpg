@@ -74,7 +74,7 @@ public class StdDungeonMonster extends JGObject {
 	int block_mask, int occupy_mask, double speed, 
 	JGObject home_in,boolean avoid,double random_proportion) {
 		super(name,unique_id, x,y, cid, graphic);
-		setTileBBox(0,0,eng.tileWidth(),eng.tileHeight());
+		//setTileBBox(0,0,eng.tileWidth(),eng.tileHeight());
 		setDirSpeed(0,0,speed);
 		if (is_directional) gfx_prefix=graphic;
 		this.continuous_anim=continuous_anim;
