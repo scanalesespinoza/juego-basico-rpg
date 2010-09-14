@@ -38,12 +38,12 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     public boolean estadoClick = false;
     double mouseX;
     double mouseY;
-    //factor es para convertir el punto del mouse de 800*600 a 1280*960 
+    //factor es para convertir el punto del mouse de 800*600 a 1280*960
     //proporcionalmente para que se desplace de forma correcta
     double factor = 1.6;
 
     public Personaje(double x, double y, double speed) {
-        super("player", x, y, 1, "human_l", false, false,
+        super("player", x, y, 1, "human_", true, false,
                 PLAYERBLOCK_T, PLAYER_T, 2.3);
         stopAnim();
     }

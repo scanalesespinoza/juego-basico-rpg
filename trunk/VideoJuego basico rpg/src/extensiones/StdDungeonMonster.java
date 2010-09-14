@@ -191,6 +191,7 @@ public class StdDungeonMonster extends JGObject {
 	* @param prevxdir  direction we were going previously (such as, last frame)
 	* @param prevydir  direction we were going previously (such as, last frame)
 	*/
+
 	public static void checkIfBlocked(JGObject o,int block_mask,
 	int prevxdir,int prevydir) {
 		JGPoint cen = o.getCenterTile();
@@ -216,4 +217,9 @@ public class StdDungeonMonster extends JGObject {
 		if (o.xdir!=0 && !can_go_h) o.xdir=0;
 		if (o.ydir!=0 && !can_go_v) o.ydir=0;
 	}
+
+        public void interactuar(){
+                JGRectangle cuadroDialogo;
+                cuadroDialogo = new JGRectangle(300, 200, (int)this.x , (int)this.y);
+        }
 }

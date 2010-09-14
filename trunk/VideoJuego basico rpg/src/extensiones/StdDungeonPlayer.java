@@ -83,6 +83,7 @@ public class StdDungeonPlayer extends JGObject {
 	/** Moves the object around, and ensures it occupies
 	 * space.  If you override this, be sure to call super.move() and don't
 	 * touch x, y, xspeed, yspeed, xdir, ydir. */
+    @Override
 	public void move() {
 		if ( occupied==null 
 		||   (xdir==0 && ydir==0 && (!isXAligned() || !isYAligned()) )  ) {
@@ -121,6 +122,7 @@ public class StdDungeonPlayer extends JGObject {
 		}
 	}
 	/** Removes object and object's occupation. */
+    @Override
 	public void destroy() {
 		// remove occupation
 		if (occupied!=null)
