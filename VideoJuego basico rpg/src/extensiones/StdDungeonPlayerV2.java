@@ -62,20 +62,22 @@ public class StdDungeonPlayerV2 extends JGObject {
 	public StdDungeonPlayerV2(String name, double x,double y, int cid,
 	String graphic, boolean is_directional, boolean continuous_anim,
 	int block_mask, int occupy_mask, double speed) {
-	//int key_upleft,int key_downleft, int key_upright, int key_downright) {
 		super(name,false, x,y, cid, graphic);
-		setTileBBox(0,0,eng.tileWidth(),eng.tileHeight());
+		setTileBBox(0,0,eng.tileWidth()*3,eng.tileHeight()*6);
 		setDir(0,0);
 		if (is_directional) gfx_prefix=graphic;
 		this.continuous_anim=continuous_anim;
-		/*this.pkey_up=false;
+		this.pkey_up=false;
 		this.pkey_down=false;
 		this.pkey_left=false;
 		this.pkey_right=false;
-		/*this.key_upleft=key_upleft;
+                /*
+		this.key_upleft=key_upleft;
 		this.key_downleft=key_downleft;
 		this.key_upright=key_upright;
-		this.key_downright=key_downright;*/
+		this.key_downright=key_downright;
+                 */
+                occupy_mask=block_mask;
 		this.block_mask=block_mask;
 		this.occupy_mask=occupy_mask;
 		setSpeed(speed,speed);
@@ -83,7 +85,19 @@ public class StdDungeonPlayerV2 extends JGObject {
 	/** Moves the object around, and ensures it occupies
 	 * space.  If you override this, be sure to call super.move() and don't
 	 * touch x, y, xspeed, yspeed, xdir, ydir. */
+    @Override
 	public void move() {
+                //coincidir direccion grafica con logica
+                if (xdir < 0){
+                    setGraphic("human_l");
+                } else if (xdir > 0){
+                    setGraphic("human_r");
+                } else if (ydir < 0){
+                    setGraphic("human_u");
+                } else if (ydir > 0){
+                    setGraphic("human_d");
+                }
+
 		if ( occupied==null 
 		||   (xdir==0 && ydir==0 && (!isXAligned() || !isYAligned()) )  ) {
 			// make sure we're occupying space and are on the grid when we're

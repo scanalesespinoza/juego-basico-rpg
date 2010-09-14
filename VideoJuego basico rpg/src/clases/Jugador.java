@@ -13,7 +13,7 @@ import sun.java2d.loops.DrawRect;
 public class Jugador extends Personaje {
 
     public Jugador(double x, double y, double speed) {
-        super(x, y, speed);
+        super(x, y,speed);
 
     }
     private short vitalidad;
@@ -111,7 +111,6 @@ public class Jugador extends Personaje {
         remove();
         setAusente(true);
     }
-
     public boolean isAusente() {
         return ausente;
     }
