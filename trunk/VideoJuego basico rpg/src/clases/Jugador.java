@@ -1,10 +1,9 @@
 package clases;
 
 import java.sql.Date;
-import jgame.JGObject;
-import jgame.JGRectangle;
-import jgame.platform.JGEngine;
-import sun.java2d.loops.DrawRect;
+import java.util.HashMap;
+import jgame.*;
+
 
 /**
  *
@@ -16,6 +15,8 @@ public class Jugador extends Personaje {
         super(x, y,speed);
 
     }
+    private short idPersonaje;
+    private short idCuenta;
     private short vitalidad;
     private short destreza;
     private short sabiduria;
@@ -27,8 +28,17 @@ public class Jugador extends Personaje {
     private int pesoSoportado;
     private Date fechaCreacion;
     private boolean esBaneado;
-    private short idCuenta;
-    private boolean ausente = false;
+    //Determina si un npc esta activo (se ha colisionado con el desencadenando un dialogo con el jugador)
+    private boolean interactuarNpc = false;
+    private dbDelegate conect = new dbDelegate();
+
+    
+
+
+    /*
+     * Carga datos del personaje
+     */
+
 
 
 
@@ -46,7 +56,7 @@ public class Jugador extends Personaje {
             mouseX = eng.getMouseX() + eng.viewXOfs();
             mouseY = eng.getMouseY() + eng.viewYOfs();
 
-            if(ausente){
+            if(interactuarNpc){
                 return;
             }
 
@@ -106,19 +116,131 @@ public class Jugador extends Personaje {
         super.desplazar();
     }
 
+
     @Override
-    public void hit(JGObject obj) {
+    public void hit(JGObject obj){
+        try{
+            conect.actualizaPosicionJugador(this.getIdPersonaje(),(int)this.getLastX(),(int)this.getLastY()+5);
+        }
+        catch(Exception ex){
+            System.out.println("Error al conectar la DB #Jugador.Hit: "+ex);
+        }
+        
         remove();
-        setAusente(true);
-    }
-    public boolean isAusente() {
-        return ausente;
+        this.setInteractuarNpc(true);
     }
 
-    public void setAusente(boolean ausente) {
-        this.ausente = ausente;
+    public short getDestreza() {
+        return destreza;
     }
 
+    public void setDestreza(short destreza) {
+        this.destreza = destreza;
+    }
+
+    public boolean isEsBaneado() {
+        return esBaneado;
+    }
+
+    public void setEsBaneado(boolean esBaneado) {
+        this.esBaneado = esBaneado;
+    }
+
+    public int getExperiencia() {
+        return experiencia;
+    }
+
+    public void setExperiencia(int experiencia) {
+        this.experiencia = experiencia;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public short getFuerza() {
+        return fuerza;
+    }
+
+    public void setFuerza(short fuerza) {
+        this.fuerza = fuerza;
+    }
+
+    public short getIdPersonaje() {
+        return idPersonaje;
+    }
+
+    public void setIdPersonaje(short idPersonaje) {
+        this.idPersonaje = idPersonaje;
+    }
+
+    public int getLimiteSuperiorExperiencia() {
+        return limiteSuperiorExperiencia;
+    }
+
+    public void setLimiteSuperiorExperiencia(int limiteSuperiorExperiencia) {
+        this.limiteSuperiorExperiencia = limiteSuperiorExperiencia;
+    }
+
+    public int getPesoSoportado() {
+        return pesoSoportado;
+    }
+
+    public void setPesoSoportado(int pesoSoportado) {
+        this.pesoSoportado = pesoSoportado;
+    }
+
+    public short getSabiduria() {
+        return sabiduria;
+    }
+
+    public void setSabiduria(short sabiduria) {
+        this.sabiduria = sabiduria;
+    }
+
+    public short getTotalPuntosEstadistica() {
+        return totalPuntosEstadistica;
+    }
+
+    public void setTotalPuntosEstadistica(short totalPuntosEstadistica) {
+        this.totalPuntosEstadistica = totalPuntosEstadistica;
+    }
+
+    public short getTotalPuntosHabilidad() {
+        return totalPuntosHabilidad;
+    }
+
+    public void setTotalPuntosHabilidad(short totalPuntosHabilidad) {
+        this.totalPuntosHabilidad = totalPuntosHabilidad;
+    }
+
+    public short getVitalidad() {
+        return vitalidad;
+    }
+
+    public void setVitalidad(short vitalidad) {
+        this.vitalidad = vitalidad;
+    }
+
+    public short getIdCuenta() {
+        return idCuenta;
+    }
+
+    public void setIdCuenta(short idCuenta) {
+        this.idCuenta = idCuenta;
+    }
+
+    public boolean isInteractuarNpc() {
+        return interactuarNpc;
+    }
+
+    public void setInteractuarNpc(boolean interactuarNpc) {
+        this.interactuarNpc = interactuarNpc;
+    }
 
 
 }
