@@ -16,8 +16,9 @@ public class Conexion {
     public  Conexion() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/ddb_Trabajo_Titulo";
-            cn = DriverManager.getConnection(url, "root", "Vicarious");
+            String url = "jdbc:mysql://localhost:3306/db_trabajo_titulo";
+            cn = DriverManager.getConnection(url, "root", "gwdesarrollo");
+            System.out.println("Conexion ´Conexion´ correcta");
         } catch (Exception ee) {
             System.out.println("Error:" + ee.getMessage());
         }

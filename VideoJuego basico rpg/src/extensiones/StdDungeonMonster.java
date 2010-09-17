@@ -218,8 +218,5 @@ public class StdDungeonMonster extends JGObject {
 		if (o.ydir!=0 && !can_go_v) o.ydir=0;
 	}
 
-        public void interactuar(){
-                JGRectangle cuadroDialogo;
-                cuadroDialogo = new JGRectangle(300, 200, (int)this.x , (int)this.y);
-        }
+
 }

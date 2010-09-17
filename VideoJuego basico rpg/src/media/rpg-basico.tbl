@@ -1,3 +1,5 @@
+//imagen loading
+splash_image	a	1	/media/look/loading.png	-	0	0	505	335
 //define musica
 musicaciudad	/media/sonidos/menu/juego01.mid
 

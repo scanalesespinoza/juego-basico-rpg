@@ -19,7 +19,5 @@ public class Npc extends StdDungeonMonster  {
     }
 
 
-
-
     
 }

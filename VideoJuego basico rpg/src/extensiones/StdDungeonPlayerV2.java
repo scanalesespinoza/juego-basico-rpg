@@ -59,18 +59,18 @@ public class StdDungeonPlayerV2 extends JGObject {
 	* @param block_mask  cid mask of tiles that block
 	* @param occupy_mask  cid mask that object should use to indicate occupation
 	*/
-	public StdDungeonPlayerV2(String name, double x,double y, int cid,
-	String graphic, boolean is_directional, boolean continuous_anim,
-	int block_mask, int occupy_mask, double speed) {
-		super(name,false, x,y, cid, graphic);
-		setTileBBox(0,0,eng.tileWidth()*3,eng.tileHeight()*6);
-		setDir(0,0);
-		if (is_directional) gfx_prefix=graphic;
-		this.continuous_anim=continuous_anim;
-		this.pkey_up=false;
-		this.pkey_down=false;
-		this.pkey_left=false;
-		this.pkey_right=false;
+        public StdDungeonPlayerV2(String name, double x,double y, int cid,
+        String graphic, boolean is_directional, boolean continuous_anim,
+        int block_mask, int occupy_mask, double speed) {
+                super(name,false, x,y, cid, graphic);
+                setTileBBox(16,16,32,64);
+                setDir(0,0);
+                if (is_directional) gfx_prefix=graphic;
+                this.continuous_anim=continuous_anim;
+                this.pkey_up=false;
+                this.pkey_down=false;
+                this.pkey_left=false;
+                this.pkey_right=false;
                 /*
 		this.key_upleft=key_upleft;
 		this.key_downleft=key_downleft;
