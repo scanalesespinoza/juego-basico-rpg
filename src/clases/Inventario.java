@@ -16,6 +16,12 @@ public class Inventario {
     private short cantidad;
     private boolean estaEquipado;
 
+    public Inventario(short idPersonaje) {
+        this.idPersonaje = idPersonaje;
+        //Buscar los objetos que tiene asociado el personaje segun la ID entregada
+    }
+
+
     public short getCantidad() {
         return cantidad;
     }

@@ -40,6 +40,7 @@ public class Manager extends JGEngine{
     public Npc casa5;
     public Npc casa5Npc;
     public Npc pasto1;
+    public Npc pasto2;
 
 
     private HashMap hsDatosPersonaje = new HashMap();
@@ -100,10 +101,24 @@ public class Manager extends JGEngine{
         catch(Exception ex){
             System.out.println("Extrae datos del HashMap: "+ex);
         }
-        casa1 = new Npc(680,672,"casa1","casa1",50,0);
-        alcaldia = new Npc(700,80,"alcaldia","casa1",51,0);
-        pasto1 = new Npc(192,128,"pasto","pasto",30,0);
 
+        casa1 = new Npc(680,672,"casa1","casa1",2,0,
+                        new String[]{"Hola amigo",
+                            "como estas",
+                            "Me doy cuenta que no eres de estos lados",
+                            "te advierto que es muy peligroso salir de la cuidad",
+                            "hay muchas criaturas peligrosas",
+                            "si no tienes donde ir puedes quedarte",
+                            "mientras ayudes a mantener la cuidad en pie",
+                            "todos te aceptaran sin problema",
+                            "pensadolo hay mucho trabajo que hacer",
+                            "acomapañame a la plaza y danos una mano",
+                            "podras conocer al resto de la gente."
+                            }
+                );//casa superior
+        alcaldia = new Npc(700,80,"alcaldia","casa1",8,0,new String[]{"Hola amiguirijillo","soy alcaldia"});//casa inferior
+        pasto1 = new Npc(192,128,"pasto","pasto",4,0,new String[]{"Hola amiguirijillo","soy pastillo1"});//pasto
+        pasto2 = new Npc(200,128,"pasto","pasto",4,0,new String[]{"Hola amiguirijillo","soy pastillo2"});//pasto
 
 
         /*
@@ -195,7 +210,7 @@ public class Manager extends JGEngine{
             pj.setInteractuarNpc(false);
             setInteractuar(0);
         }else if((pj.isInteractuarNpc())&&(interactuar==0)){
-            casa1 = new Npc(viewXOfs()+300,viewYOfs()+120,"casa1Npc","npc3",51,51);
+            casa1 = new Npc(viewXOfs()+300,viewYOfs()+120,"casa1Npc","npc3",51,51,pj.idNpcInterac.obtieneDialogo());
             setInteractuar(1);
         }else if((interactuar>0)&&(interactuar<casa1.obtieneDialogo().length)&&(getKey(KeyEnter))){
 
@@ -212,8 +227,16 @@ public class Manager extends JGEngine{
         moveObjects(null, 0);
         // llamada al metodo de colision entre objetos con las siguientes id de colision
         checkCollision(
-                30+50+51, // cids of objects that our objects should collide with
-                30+50+51 // cids of the objects whose hit() should be called
+                4+1, // cids of objects that our objects should collide with
+                1 // cids of the objects whose hit() should be called
+                );
+        checkCollision(
+                2+1, // cids of objects that our objects should collide with
+                1 // cids of the objects whose hit() should be called
+                );
+        checkCollision(
+                8+1, // cids of objects that our objects should collide with
+                1 // cids of the objects whose hit() should be called
                 );
 
         // llamada al metodo de colision entre objeto y escenario con las siguientes id de colision
@@ -232,6 +255,7 @@ public class Manager extends JGEngine{
                 true   
          );
     }
+
     @Override
     public void paintFrame() {
         //panel basico
@@ -252,7 +276,8 @@ public class Manager extends JGEngine{
         drawRect(viewXOfs()+700,viewYOfs(),100,viewHeight(), true, false);
 
         if(interactuar>0){
-            ventanaDialogo(casa1.obtieneDialogo());
+            
+            ventanaDialogo(pj.idNpcInterac.obtieneDialogo());
         }
     }
 

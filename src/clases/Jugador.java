@@ -10,9 +10,11 @@ import jgame.*;
  * @author gerald
  */
 public class Jugador extends Personaje {
+    public Inventario[] inv;
 
     public Jugador(double x, double y, double speed) {
         super(x, y,speed);
+        this.inventario=new Inventario(this.idPersonaje);
 
     }
     private short idPersonaje;
@@ -32,7 +34,8 @@ public class Jugador extends Personaje {
     private boolean interactuarNpc = false;
     private dbDelegate conect = new dbDelegate();
 
-    
+    public Npc idNpcInterac;
+    private Inventario inventario;
 
 
     /*
@@ -128,7 +131,9 @@ public class Jugador extends Personaje {
         
         remove();
         this.setInteractuarNpc(true);
-        System.out.println("Nombre del objeto colisionador"+getName());
+        System.out.println("Nombre del objeto colisionador"+getGraphic()+getName());
+
+        this.idNpcInterac=(Npc)obj;
     }
 
     public short getDestreza() {

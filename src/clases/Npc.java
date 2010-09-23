@@ -6,6 +6,7 @@
 package clases;
 
 import extensiones.StdDungeonMonster;
+import jgame.*;
 
 /**
  *
@@ -13,14 +14,16 @@ import extensiones.StdDungeonMonster;
  */
 
 public class Npc extends StdDungeonMonster  {
+    public String[] dialogo;
 
-    public Npc(double x,double y,String name,String mediaName,int colId,int tamano) {
+    public Npc(double x,double y,String name,String mediaName,int colId,int tamano,String[] dialogo) {
             super(name,true,x,y,colId,mediaName,tamano);
-
+            this.dialogo=dialogo;
          
     }
 
     public String[] obtieneDialogo(){
+        /*
         String[] dialogo = {"Hola amigo",
                             "como estas",
                             "Me doy cuenta que no eres de estos lados",
@@ -33,10 +36,15 @@ public class Npc extends StdDungeonMonster  {
                             "acomapañame a la plaza y danos una mano",
                             "podras conocer al resto de la gente."
                             };
+         * 
+         */
 
         return dialogo;
     }
-
+    @Override
+    public void hit(JGObject obj){
+            System.out.println("Hit NPC!"+obj.getName());
+    }
 
 
     
