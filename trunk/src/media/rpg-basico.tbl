@@ -23,7 +23,6 @@ pj_right_map		/media/imagenes/personaje/Animation_Right64.png		0	0	49	64	0	0
 
 //gif-map casa1
 casa1_map	/media/imagenes/tiles/casa2.gif	0	0	192	100	192	100
-casa1Npc_map	/media/imagenes/personaje/homero_enojado.png	0	0	400	236	0	0
 //npc's
 npc3	-	0	/media/imagenes/npc/npc4.png	-
 //separacion cuadro por cuadro del movimiento del pj a la izquierda
@@ -96,13 +95,11 @@ casa1_0		x	0	casa1_map	0	-
 casa1_1		x	0	casa1_map	0	-
 casa1_2		x	0	casa1_map	0	-
 
-casa1Npc_0		x	0	casa1Npc_map	0	-
-casa1Npc_1		x	0	casa1Npc_map	0	-
-casa1Npc_2		x	0	casa1Npc_map	0	-
+
 
 casa1	casa1_0;casa1_1;casa1_2		0.3
 
-casa1Npc	casa1Npc_0;casa1Npc_1;casa1Npc_2		0.3
+
 
 // "null" indica un tile vacio, se representara como un espacio trasparente
 vacio   .   0   null    -

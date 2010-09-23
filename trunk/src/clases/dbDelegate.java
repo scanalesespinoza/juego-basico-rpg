@@ -13,7 +13,7 @@ public class dbDelegate {
    static final String bd = "db_trabajo_titulo";
    static final String login = "root";
    static final String password = "gwdesarrollo";
-   static String url = "jdbc:mysql://getway.sytes.net:3306/"+bd;
+   static String url = "jdbc:mysql://localhost:3306/"+bd;
 
    public Connection conn = null;
 
