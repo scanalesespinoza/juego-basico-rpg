@@ -102,6 +102,24 @@ public class dbDelegate {
 
     }
 
+    public short[] datosConstruyePersonaje(short id){
+        short pos[]=null;
+        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
+        try{
+            Statement st = conn.createStatement();
+            ResultSet res = st.executeQuery(StrSql);
+            while (res.next()) {
+              pos[0] = res.getShort("posicionX");
+              pos[1] = res.getShort("posicionY");
+            }
+        }
+        catch(SQLException ex) {
+        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+        }
+        return pos;
+
+    }
+
     public void actualizaPosicionJugador(int id, int posicionX, int posicionY){
         System.out.println("ID :"+id);
         System.out.println("X :"+posicionX);

@@ -42,10 +42,11 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     //proporcionalmente para que se desplace de forma correcta
     double factor = 1.6;
 
-    public Personaje(double x, double y, double speed) {
+    public Personaje(double x, double y, double speed, short idPj) {
         super("player", x, y, 1, "human_", true, false,
                 PLAYERBLOCK_T, PLAYER_T, 2.3);
         stopAnim();
+        this.idPersonaje=idPj;
     }
     /**
      * Este método es un puente al move de la clase StdDungeonPlayerV2
@@ -53,4 +54,37 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     public void desplazar() {
         super.move();
     }
+
+    public short getIdPersonaje() {
+        return idPersonaje;
+    }
+
+    public void setIdPersonaje(short idPersonaje) {
+        this.idPersonaje = idPersonaje;
+    }
+
+    public short getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(short nivel) {
+        this.nivel = nivel;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
 }
