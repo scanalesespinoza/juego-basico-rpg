@@ -259,19 +259,7 @@ public class Manager extends JGEngine{
     @Override
     public void paintFrame() {
         //panel basico
-        setColor(JGColor.white);
-        drawRect(viewXOfs()+550,viewYOfs(),100,viewHeight(), true, false);
-        drawRect(viewXOfs(),viewYOfs()+400,viewWidth(),100, true, false);
-        
-        setColor(JGColor.black);
-        setFont(new JGFont("Arial",0,10));
-  
-        drawString("Coordenada X: "+pj.x+" Coordenada Y: "+pj.y, viewWidth()/2, 420, 0);
-        drawString("Nombre: "+hsDatosPersonaje.get("nombre").toString(), viewWidth()-50, 10, 0);
-        drawString("Fuerza: "+pj.getFuerza(), viewWidth()-50, 30, 0);
-        drawString("Destreza: "+pj.getDestreza(), viewWidth()-50, 50, 0);
-        drawString("Sabiduria: "+pj.getSabiduria(), viewWidth()-50, 70, 0);
-        drawString("Vitalidad: "+pj.getVitalidad(), viewWidth()-50, 90, 0);
+
 
         drawRect(viewXOfs()+700,viewYOfs(),100,viewHeight(), true, false);
 
@@ -288,32 +276,9 @@ public class Manager extends JGEngine{
      * Param varY: Solucion para no cargar el personaje sobre un npc.
      */
     public void cargaJugador(double varX, double varY){
-        hsDatosPersonaje = conect.obtieneDatosPersonaje(this.getIdJugador());
-        System.out.println("cuenta obtenida"+hsDatosPersonaje.get("posX"));
-        System.out.println("cuenta obtenida"+hsDatosPersonaje.get("posY"));
-        pj = new Jugador(Double.valueOf(String.valueOf(hsDatosPersonaje.get("posX")))+varX,Double.valueOf(String.valueOf(hsDatosPersonaje.get("posY")))+varY,1);
-        pj.setIdPersonaje((Short.valueOf(hsDatosPersonaje.get("id").toString())));
-        pj.setIdCuenta((Short.valueOf(hsDatosPersonaje.get("cuenta").toString())));
-        System.out.println("cuenta obtenida");
-        pj.setVitalidad((Short.valueOf(hsDatosPersonaje.get("vit").toString())));
-        System.out.println("vit obtenida");
-        pj.setDestreza((Short.valueOf(hsDatosPersonaje.get("des").toString())));
-        System.out.println("des obtenida");
-        pj.setSabiduria((Short.valueOf(hsDatosPersonaje.get("sab").toString())));
-        System.out.println("sab obtenida");
-        System.out.println("fue :"+hsDatosPersonaje.get("fue").toString());
-        pj.setFuerza((Short.valueOf(hsDatosPersonaje.get("fue").toString())));
-        System.out.println("fue obtenida");
-        pj.setTotalPuntosHabilidad((Short.valueOf(hsDatosPersonaje.get("ptosHab").toString())));
-        System.out.println("ptoshab obtenida");
-        pj.setTotalPuntosEstadistica((Short.valueOf(hsDatosPersonaje.get("ptosEst").toString())));
-        System.out.println("ptosest obtenida");
-        pj.setLimiteSuperiorExperiencia(Integer.parseInt(hsDatosPersonaje.get("limExp").toString()));
-        System.out.println("limexp obtenida");
-        pj.setExperiencia(Integer.parseInt(hsDatosPersonaje.get("experiencia").toString()));
-        System.out.println("exp obtenida");
-        pj.setPesoSoportado(Integer.parseInt(hsDatosPersonaje.get("peso").toString()));
-        System.out.println("peso obtenida");
+
+        pj = new Jugador(Double.valueOf(String.valueOf(hsDatosPersonaje.get("posX")))+varX,Double.valueOf(String.valueOf(hsDatosPersonaje.get("posY")))+varY,1,idJugador);
+
     }
 
     public void ventanaDialogo(String[] texto){

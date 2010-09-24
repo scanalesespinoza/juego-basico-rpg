@@ -12,13 +12,16 @@ import jgame.*;
 public class Jugador extends Personaje {
     public Inventario[] inv;
 
-    public Jugador(double x, double y, double speed) {
-        super(x, y,speed);
-        this.inventario=new Inventario(this.idPersonaje);
+    public Jugador(double x, double y, double speed, short idPj) {
+        
+        super(x, y, speed, idPj);
+        //Instancia un ventario del jugador
+        this.inventario=new Inventario(idPj);
+        //Instancia misiones del jugador
 
+        //Instancia habilidades del jugador
     }
-    private short idPersonaje;
-    private short idCuenta;
+
     private short vitalidad;
     private short destreza;
     private short sabiduria;
@@ -41,7 +44,28 @@ public class Jugador extends Personaje {
     /*
      * Carga datos del personaje
      */
+    public void cargaDatosPj(){
+        HashMap datosPj = new HashMap();
+        //Carga datos del jugador desde la base de datos
+        try{
+            datosPj=conect.obtieneDatosPersonaje(getIdPersonaje());
+        }
+        catch(Exception ex){
+            System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
+        }
 
+        this.setIdPersonaje((Short.valueOf(datosPj.get("id").toString())));
+        this.setVitalidad((Short.valueOf(datosPj.get("vit").toString())));
+        this.setDestreza((Short.valueOf(datosPj.get("des").toString())));
+        this.setSabiduria((Short.valueOf(datosPj.get("sab").toString())));
+        this.setFuerza((Short.valueOf(datosPj.get("fue").toString())));
+        this.setTotalPuntosHabilidad((Short.valueOf(datosPj.get("ptosHab").toString())));
+        this.setTotalPuntosEstadistica((Short.valueOf(datosPj.get("ptosEst").toString())));
+        this.setLimiteSuperiorExperiencia(Integer.parseInt(datosPj.get("limExp").toString()));
+        this.setExperiencia(Integer.parseInt(datosPj.get("experiencia").toString()));
+        this.setPesoSoportado(Integer.parseInt(datosPj.get("peso").toString()));
+
+    }
 
 
 
@@ -176,14 +200,6 @@ public class Jugador extends Personaje {
         this.fuerza = fuerza;
     }
 
-    public short getIdPersonaje() {
-        return idPersonaje;
-    }
-
-    public void setIdPersonaje(short idPersonaje) {
-        this.idPersonaje = idPersonaje;
-    }
-
     public int getLimiteSuperiorExperiencia() {
         return limiteSuperiorExperiencia;
     }
@@ -230,14 +246,6 @@ public class Jugador extends Personaje {
 
     public void setVitalidad(short vitalidad) {
         this.vitalidad = vitalidad;
-    }
-
-    public short getIdCuenta() {
-        return idCuenta;
-    }
-
-    public void setIdCuenta(short idCuenta) {
-        this.idCuenta = idCuenta;
     }
 
     public boolean isInteractuarNpc() {
