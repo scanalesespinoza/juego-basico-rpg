@@ -4,7 +4,7 @@
  */
 package clases;
 
-import jgame.JGPoint;
+//import jgame.JGPoint;
 import jgame.JGRectangle;
 
 /**
@@ -29,11 +29,12 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
             WALL_T | SHWALL_T | DOOR_T | BONUS_T | MONSTER_T | GEN_T | BONUS_T | KEY_T | HEALTH_T;
     public static final int BULLETBLOCK_T =
             WALL_T | DOOR_T | BONUS_T | BONUS_T | KEY_T | HEALTH_T;
+    //Variables de juego de Personaje
     private short idPersonaje;
     private String nombre;
     private short nivel;
-    private String tipo;
-    public String msg = "";
+    private short tipo;
+    
     public JGRectangle rClick;
     public boolean estadoClick = false;
     double mouseX;
@@ -42,11 +43,14 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     //proporcionalmente para que se desplace de forma correcta
     double factor = 1.6;
 
-    public Personaje(double x, double y, double speed, short idPj) {
+    public Personaje(double x, double y, double speed, short idPersonaje, String nombre, short nivel, short tipo) {
         super("player", x, y, 1, "human_", true, false,
                 PLAYERBLOCK_T, PLAYER_T, 2.3);
         stopAnim();
-        this.idPersonaje=idPj;
+        this.idPersonaje=idPersonaje;
+        this.nombre=nombre;
+        this.nivel=nivel;
+        this.tipo=tipo;
     }
     /**
      * Este método es un puente al move de la clase StdDungeonPlayerV2
@@ -79,12 +83,14 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
         this.nombre = nombre;
     }
 
-    public String getTipo() {
+    public short getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(short tipo) {
         this.tipo = tipo;
     }
+
+
     
 }

@@ -43,7 +43,7 @@ public class Npc extends StdDungeonMonster  {
     }
     @Override
     public void hit(JGObject obj){
-            System.out.println("Hit NPC!"+obj.getName());
+            //System.out.println("Hit NPC!"+obj.getName());
     }
 
 
