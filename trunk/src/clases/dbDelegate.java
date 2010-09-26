@@ -13,7 +13,7 @@ public class dbDelegate {
    static final String bd = "db_trabajo_titulo";
    static final String login = "root";
    static final String password = "gwdesarrollo";
-   static String url = "jdbc:mysql://localhost:3306/"+bd;
+   static String url = "jdbc:mysql://getway.sytes.net:3306/"+bd;
 
    public Connection conn = null;
 
@@ -45,20 +45,20 @@ public class dbDelegate {
    }
 
     public HashMap obtieneDatosPersonaje(short id){
-        System.out.println("Inicio obtiene datos personaje");
+        //System.out.println("Inicio obtiene datos personaje");
         HashMap hs = new HashMap();
         String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
         try{
             Statement st = conn.createStatement();
-            System.out.println("Crea stamento");
+            //System.out.println("Crea stamento");
             ResultSet res = st.executeQuery(StrSql);
-            System.out.println("ejecuta query");
-            while (res.next()) {
-              System.out.println("consulta primera fila");
-              System.out.println("Obtiene ID: "+res.getString("id"));
+            //System.out.println("ejecuta query");
+            if (res.next()) {
+              //System.out.println("consulta primera fila");
+              //System.out.println("Obtiene ID: "+res.getString("id"));
 
               hs.put("id",res.getString("id"));
-              System.out.println("ID guardada en el hashmap");
+              //System.out.println("ID guardada en el hashmap");
               hs.put("nombre",res.getString("nombre"));
               hs.put("nivel",res.getString("nivel"));
               hs.put("posX",res.getString("posX"));
@@ -83,6 +83,9 @@ public class dbDelegate {
         return hs;
 
     }
+    public void actualizaPersonaje(Jugador pj){
+
+    }
 
     public short[] obtienePosPersonaje(short id){
         short pos[]=null;
@@ -90,7 +93,7 @@ public class dbDelegate {
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
-            while (res.next()) {
+            if(res.next()) {
               pos[0] = res.getShort("posicionX");
               pos[1] = res.getShort("posicionY");
             }
@@ -102,21 +105,26 @@ public class dbDelegate {
 
     }
 
-    public short[] datosConstruyePersonaje(short id){
-        short pos[]=null;
-        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
+    public HashMap datosConstruyePersonaje(short id){
+        HashMap dataIni=new HashMap();
+        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, tipo FROM personaje pjuno WHERE pjuno.idPersonaje="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
-            while (res.next()) {
-              pos[0] = res.getShort("posicionX");
-              pos[1] = res.getShort("posicionY");
+            if (res.next()) {
+              dataIni.put("nombrePj",res.getString("nombre"));
+              System.out.println("nombre: "+res.getString("nombre"));
+              dataIni.put("nivelPj",res.getShort("nivel"));
+              System.out.println("nivel: "+res.getShort("nivel"));
+              dataIni.put("posX",res.getShort("posX"));
+              dataIni.put("posY",res.getShort("posY"));
+              dataIni.put("tipo",res.getShort("tipo"));
             }
         }
         catch(SQLException ex) {
         System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
         }
-        return pos;
+        return dataIni;
 
     }
 

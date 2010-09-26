@@ -12,9 +12,9 @@ import jgame.*;
 public class Jugador extends Personaje {
     public Inventario[] inv;
 
-    public Jugador(double x, double y, double speed, short idPj) {
+    public Jugador(double x, double y, double speed, short idPj, String nombrePj, short nivelPj, short tipoPj) {
         
-        super(x, y, speed, idPj);
+        super(x, y, speed, idPj, nombrePj, nivelPj, tipoPj);
         //Instancia un ventario del jugador
         this.inventario=new Inventario(idPj);
         //Instancia misiones del jugador
@@ -67,6 +67,12 @@ public class Jugador extends Personaje {
 
     }
 
+  /*
+   * Salva los datos del Jugador a la base de datos
+   */
+    public void salvaPj(Jugador This){
+        
+    }
 
 
     @Override
