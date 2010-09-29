@@ -6,7 +6,6 @@
 package clases;
 
 import extensiones.StdDungeonMonster;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -64,11 +63,14 @@ public class Npc extends StdDungeonMonster  {
         return dialogo;
     }
 
-    public void realizaTarea(short idJugador) throws SQLException{
+    public void realizaTarea(Jugador pj) throws SQLException{
         c1 = Calendar.getInstance();
         String dia = Integer.toString(c1.get(Calendar.DATE));
         String mes = Integer.toString(c1.get(Calendar.MONTH));
         String annio = Integer.toString(c1.get(Calendar.YEAR));
+        System.out.println("año:"+annio);
+        System.out.println("mes:"+mes);
+        System.out.println("dia:"+dia);
         HashMap datosPj = new HashMap();
         //Carga datos del jugador desde la base de datos
         try{
@@ -78,6 +80,7 @@ public class Npc extends StdDungeonMonster  {
             System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
         }
         int tipo=Integer.parseInt(datosPj.get("tipo").toString());
+        int i;
 
         if(tipo==1){//si es Npc de Misiones
             try{
@@ -86,22 +89,47 @@ public class Npc extends StdDungeonMonster  {
             catch(Exception ex){
                 System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
             }
-            ResultSet encargo=conect.Consulta("SELECT * FROM encargo WHERE idPersonaje="+idJugador+" AND idMision="+String.valueOf(datosPj.get("idMision")));
+            ResultSet encargo=conect.Consulta("SELECT * FROM encargo WHERE idPersonaje="+pj.getIdJugador()+" AND idMision="+String.valueOf(datosPj.get("idMision")));
+            
             if(!encargo.next()){
+                System.out.println("Registrar Encargo ");
+                int insertar=conect.Ejecutar("INSERT INTO encargo (idPersonaje,idMision,fechaComienzo,rolPersonaje,fechaFin) VALUES ("+pj.getIdJugador()+","+String.valueOf(datosPj.get("idMision"))+",'"+annio+"/"+mes+"/"+dia+"',0,"+null+")");
+                System.out.println("Insertar encargo filas: "+insertar);
 
-                String insertar=conect.Ejecutar("INSERT INTO encargo (idPersonaje,idMision,fechaComienzo,rolPersonaje,fechaFin) VALUES ("+idJugador+","+String.valueOf(datosPj.get("idMision"))+",'"+annio+"/"+mes+"/"+dia+"',0,"+null+")");
-                System.out.println("Insertar encargo: "+insertar);
-
-            }else if(encargo.next()){
+            }else{
+                System.out.println("fechaFin"+encargo.getDate("fechaFin"));
                 if(encargo.getDate("fechaFin")==null){
+                    System.out.println("fechaFin");
                     Inventario cInv = new Inventario();
-                    boolean finMision=cInv.comparaItem(idJugador, idNpc);
+                    boolean finMision=cInv.comparaItem(pj.getIdJugador(), idNpc);
                     if(finMision){
-                        conect.Ejecutar("Update encargo set fechaFin='"+annio+"/"+mes+"/"+dia+"' WHERE idPersonaje="+idJugador+" AND idMision="+encargo.getShort("idMision"));
+                        System.out.println("Fin mision");
+                        int updateEncargo = conect.Ejecutar("Update encargo set fechaFin='" + annio + "/" + mes + "/" + dia + "' WHERE idPersonaje=" + pj.getIdJugador() + " AND idMision=" + encargo.getShort("idMision"));
+                        int insertInventarioPj = conect.Ejecutar("INSERT INTO inventario VALUES ("+pj.getIdJugador()+",1,1,0)");
+                        
+                        int retornoDelete = conect.Ejecutar("DELETE FROM inventario WHERE idPersonaje="+pj.getIdJugador()+" AND idObjeto="+inv[0].getIdObjeto()+" AND cantidad="+inv[0].getCantidad());
+                        if(retornoDelete==0){
+                           Inventario[] pjInv = pj.getInv();
+                           short cantidad=1;
+                            for (int j = 0; j < pjInv.length; j++) {
+                                if(pjInv[j].getIdObjeto()==inv[0].getIdObjeto()){
+                                    cantidad= (short)(pjInv[j].getCantidad()-inv[0].getCantidad());
+                                }
+                           }
+                           int retornoUpdate = conect.Ejecutar("Update inventario SET cantidad="+cantidad+" WHERE idPersonaje="+pj.getIdJugador()+" AND idObjeto="+inv[0].getIdObjeto());
+                           System.out.println("Filas afectadas Update cantidad: "+retornoUpdate);
+                        }
+                        System.out.println("Filas afectadas Delete: "+retornoDelete);
+                        
                     }
                 }else{
                     dialogo=null;
-                    dialogo=new String[]{"","Muchas gracias por toda tu ayuda!"};
+                    dialogo=new String[2];
+                }
+                try{
+                    pj.cargaInventario(pj.getIdJugador());
+                }catch(SQLException ex){
+                    System.out.println("Error al cargar inventario Pj al menu"+ex);
                 }
             }
         }else if(tipo==2){//si es Npc Comerciante
@@ -116,17 +144,34 @@ public class Npc extends StdDungeonMonster  {
     }
 
     private void cargaInventario(short idPj) throws SQLException{
+
+        ResultSet rTamanoInventario=conect.obtieneTamanoInvetario(idPj);
         ResultSet rInventario=conect.obtieneInvetario(idPj);
-        if(rInventario.next()){
-            this.inv=new Inventario[rInventario.getInt("filas")];
-            for(int i=0;i<inv.length;i++){
-                inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
-                inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
-                inv[i].setCantidad(rInventario.getShort("cantidad"));
-                inv[i].setEstaEquipado(rInventario.getShort("estaEquipado"));
-                inv[i].setNombre(rInventario.getString("nombre"));
-            }
+        System.out.println("CargaIventario");
+        if(rTamanoInventario.next()){
+            inv = new Inventario[rTamanoInventario.getInt("filas")];
+            //System.out.println("rInventario.getInt('filas')"+rInventario.getInt("filas"));
+            //System.out.println("Largo Inv: "+inv.length);
         }
+        int i=0;
+        while(rInventario.next()){
+            inv[i] = new Inventario();
+            System.out.println("Indice: "+i);
+            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
+            inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
+            System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
+
+            System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
+            inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
+            System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
+            inv[i].setCantidad(rInventario.getShort("cantidad"));
+            System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));
+            inv[i].setEstaEquipado(rInventario.getShort("estaEquipado"));
+            System.out.println("rInventario.getString('nombre')"+rInventario.getString("nombre"));
+            inv[i].setNombre(rInventario.getString("nombre"));
+            i+=1;
+        }
+
     }
 
     @Override
