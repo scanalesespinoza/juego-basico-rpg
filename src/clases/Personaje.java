@@ -45,7 +45,7 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
 
     public Personaje(double x, double y, double speed, short idPersonaje, String nombre, short nivel, short tipo) {
         super("player", x, y, 1, "human_", true, false,
-                PLAYERBLOCK_T, PLAYER_T, 2.3);
+                16, 32, 2.3);
         stopAnim();
         this.idPersonaje=idPersonaje;
         this.nombre=nombre;

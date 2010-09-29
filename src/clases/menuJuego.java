@@ -95,14 +95,16 @@ public class menuJuego extends JGObject {
                     eng.drawString("[-Eliminar mision:]", eng.viewWidth()-45, 120, 0);
                     break;
                 case 3/*"inventario"*/:
+                    Inventario[] inventario=pj.getInv();
+                    String equipado  = "";
                     eng.setFont(new JGFont("Arial",0,14));
                     eng.drawString("Inventario", eng.viewWidth()-45, 10, 0);
                     eng.setFont(new JGFont("Arial",0,10));
-                    eng.drawString("Item:XXXX x999", eng.viewWidth()-45, 30, 0);
-                    eng.drawString("Item:XXXX x999", eng.viewWidth()-45, 40, 0);
-                    eng.drawString("Item:XXXX x999", eng.viewWidth()-45, 50, 0);
-                    eng.drawString("Item:XXXX x999", eng.viewWidth()-45, 60, 0);
-                    eng.drawString("Item:XXXX x999", eng.viewWidth()-45, 70, 0);
+                    for(int i=0;i<inventario.length;i++){
+                        if(inventario[i].getEstaEquipado()==0){equipado="No";}else{equipado="Si";}
+                        eng.drawString("-N°: "+i+1+" -Nombre: "+inventario[i].getNombre(), eng.viewWidth()-45, 30+i*10, 0);
+                        eng.drawString("Cantidad: "+inventario[i].getCantidad()+" -Equipado: "+equipado, eng.viewWidth()-45, 30+i*10, 0);
+                    }
                     eng.setFont(new JGFont("Arial",0,10));
                     eng.drawString("[-Descripción:    ]", eng.viewWidth()-45, 100, 0);
                     eng.drawString("[-Eliminar objeto:]", eng.viewWidth()-45, 120, 0);
