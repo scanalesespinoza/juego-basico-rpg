@@ -14,6 +14,8 @@ public class dbDelegate {
    static final String login = "root";
    static final String password = "gwdesarrollo";
    static String url = "jdbc:mysql://getway.sytes.net:3306/"+bd;
+   private Statement St;
+   private ResultSet reg;
 
    public Connection conn = null;
 
@@ -45,7 +47,7 @@ public class dbDelegate {
    }
 
     public HashMap obtieneDatosPersonaje(short id){
-        //System.out.println("Inicio obtiene datos personaje");
+        System.out.println("Inicio obtiene datos personaje");
         HashMap hs = new HashMap();
         String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
         try{
@@ -58,7 +60,7 @@ public class dbDelegate {
               //System.out.println("Obtiene ID: "+res.getString("id"));
 
               hs.put("id",res.getString("id"));
-              //System.out.println("ID guardada en el hashmap");
+              System.out.println("ID guardada en el hashmap");
               hs.put("nombre",res.getString("nombre"));
               hs.put("nivel",res.getString("nivel"));
               hs.put("posX",res.getString("posX"));
@@ -107,18 +109,42 @@ public class dbDelegate {
 
     public HashMap datosConstruyePersonaje(short id){
         HashMap dataIni=new HashMap();
-        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, tipo FROM personaje pjuno WHERE pjuno.idPersonaje="+id;
+        String StrSql = "SELECT nombre, nivel, posicionX posX, posicionY posY, tipo FROM personaje WHERE idPersonaje="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
             if (res.next()) {
               dataIni.put("nombrePj",res.getString("nombre"));
-              System.out.println("nombre: "+res.getString("nombre"));
+              //System.out.println("nombre: "+res.getString("nombre"));
               dataIni.put("nivelPj",res.getShort("nivel"));
-              System.out.println("nivel: "+res.getShort("nivel"));
+              //System.out.println("nivel: "+res.getShort("nivel"));
               dataIni.put("posX",res.getShort("posX"));
               dataIni.put("posY",res.getShort("posY"));
               dataIni.put("tipo",res.getShort("tipo"));
+            }
+        }
+        catch(SQLException ex) {
+        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+        }
+        return dataIni;
+
+    }
+
+    public HashMap datosMision(short id){
+        HashMap dataIni=new HashMap();
+        String StrSql = "SELECT * FROM mision WHERE idPersonajeConcluyeMision="+id;
+        try{
+            Statement st = conn.createStatement();
+            ResultSet res = st.executeQuery(StrSql);
+            if (res.next()) {
+              dataIni.put("idMision",res.getShort("idMision"));
+              //System.out.println("nombre: "+res.getString("nombre"));
+              dataIni.put("nomMision",res.getString("nombre"));
+              //System.out.println("nivel: "+res.getShort("nivel"));
+              dataIni.put("descMision",res.getString("descripcion"));
+              dataIni.put("nivelRequerido",res.getShort("nivelRequerido"));
+              dataIni.put("recompensaExp",res.getInt("recompensaExp"));
+              dataIni.put("repetible",res.getShort("repetible"));
             }
         }
         catch(SQLException ex) {
@@ -145,6 +171,71 @@ public class dbDelegate {
 
 
 
+    }
+    
+    public void actualizaInventario(short idPersonaje, short idItem, int cantidad,short equipado){
+        String StrSql = "INSERT INTO inventario VALUES ("+idPersonaje+","+idItem+","+cantidad+","+equipado+")";
+        try{
+            Statement st = conn.createStatement();
+            boolean insertada = st.execute(StrSql);
+            System.out.println("Insersion: "+insertada);
+
+        }
+        catch(SQLException ex) {
+        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+        }  
+    }
+
+    public ResultSet obtieneInvetario(short id){
+        String StrSql = "SELECT count(inv.idPersonaje) filas,inv.idPersonaje idPersonaje, inv.idObjeto idObjeto, inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  FROM inventario inv, objeto obj WHERE inv.idPersonaje="+id+" AND inv.idObjeto=obj.idObjeto group by inv.idPersonaje";
+        ResultSet inventario = null;
+        try{
+            Statement st = conn.createStatement();
+            inventario = st.executeQuery(StrSql);
+         
+        }
+        catch(SQLException ex) {
+        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+        }
+        return inventario;
+    }
+
+    public ResultSet comparaInvetario(short idJugador, short idNpc){
+        String StrSql = "SELECT invuno.cantidad  FROM inventario invuno, inventario invdos  WHERE invuno.idPersonaje="+idJugador+" AND invdos.idPersonaje="+idNpc+" AND invuno.idObjeto=invdos.idObjeto AND invuno.cantidad>invdos.cantidad-1";
+        ResultSet inventario = null;
+        try{
+            Statement st = conn.createStatement();
+            inventario = st.executeQuery(StrSql);
+
+        }
+        catch(SQLException ex) {
+        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+        }
+        return inventario;
+    }
+
+
+
+    public String Ejecutar(String sql) {
+        String error = "";
+        try {
+            St = conn.createStatement();
+            St.execute(sql);
+        } catch (Exception ex) {
+            error = ex.getMessage();
+        }
+        return (error);
+    }
+
+    public ResultSet Consulta(String sql) {
+        String error = "";
+        try {
+            St = conn.createStatement();
+            reg = St.executeQuery(sql);
+        } catch (Exception ee) {
+            error = ee.getMessage();
+        }
+        return (reg);
     }
 
 }

@@ -1,6 +1,8 @@
 package clases;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import jgame.*;
 
@@ -10,13 +12,13 @@ import jgame.*;
  * @author gerald
  */
 public class Jugador extends Personaje {
-    public Inventario[] inv;
-
-    public Jugador(double x, double y, double speed, short idPj, String nombrePj, short nivelPj, short tipoPj) {
-        
+    private Inventario[] inv;
+    private short idJugador;
+    public Jugador(double x, double y, double speed, short idPj, String nombrePj, short nivelPj, short tipoPj) throws SQLException {
         super(x, y, speed, idPj, nombrePj, nivelPj, tipoPj);
+        this.idJugador=idPj;
         //Instancia un ventario del jugador
-        this.inventario=new Inventario(idPj);
+        cargaInventario(idPj);
         //Instancia misiones del jugador
 
         //Instancia habilidades del jugador
@@ -37,14 +39,14 @@ public class Jugador extends Personaje {
     private boolean interactuarNpc = false;
     private dbDelegate conect = new dbDelegate();
 
-    public Npc idNpcInterac;
-    private Inventario inventario;
+    public Npc npcInterac;
 
 
     /*
      * Carga datos del personaje
      */
     public void cargaDatosPj(){
+        System.out.println("cargaDatosPj"+getIdPersonaje());
         HashMap datosPj = new HashMap();
         //Carga datos del jugador desde la base de datos
         try{
@@ -72,6 +74,33 @@ public class Jugador extends Personaje {
    */
     public void salvaPj(Jugador This){
         
+    }
+
+    private void cargaInventario(short idPj) throws SQLException{
+
+        ResultSet rInventario=conect.obtieneInvetario(idPj);
+        System.out.println("CargaIventario");
+        if(rInventario.next()){
+            inv = new Inventario[rInventario.getInt("filas")];
+            System.out.println("rInventario.getInt('filas')"+rInventario.getInt("filas"));
+            System.out.println("Largo Inv: "+inv.length);
+            
+            for(int i=0;i<inv.length;i++){
+                System.out.println("Indice: "+i);
+                System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
+                inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
+                System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
+
+                System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
+                inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
+                System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
+                inv[i].setCantidad(rInventario.getShort("cantidad"));
+                System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));
+                inv[i].setEstaEquipado(rInventario.getShort("estaEquipado"));
+                System.out.println("rInventario.getString('nombre')"+rInventario.getString("nombre"));
+                inv[i].setNombre(rInventario.getString("nombre"));
+            }
+        }
     }
 
 
@@ -163,7 +192,7 @@ public class Jugador extends Personaje {
         this.setInteractuarNpc(true);
         System.out.println("Nombre del objeto colisionador"+getGraphic()+getName());
 
-        this.idNpcInterac=(Npc)obj;
+        this.npcInterac=(Npc)obj;
     }
 
     public short getDestreza() {
@@ -260,6 +289,22 @@ public class Jugador extends Personaje {
 
     public void setInteractuarNpc(boolean interactuarNpc) {
         this.interactuarNpc = interactuarNpc;
+    }
+
+    public Inventario[] getInv() {
+        return inv;
+    }
+
+    public void setInv(Inventario[] inv) {
+        this.inv = inv;
+    }
+
+    public short getIdJugador() {
+        return idJugador;
+    }
+
+    public void setIdJugador(short idJugador) {
+        this.idJugador = idJugador;
     }
 
 

@@ -63,7 +63,7 @@ public class StdDungeonPlayerV2 extends JGObject {
         String graphic, boolean is_directional, boolean continuous_anim,
         int block_mask, int occupy_mask, double speed) {
                 super(name,false, x,y, cid, graphic);
-                setTileBBox(16,16,32,64);
+                setTileBBox(16,16,0,0);
                 setDir(0,0);
                 if (is_directional) gfx_prefix=graphic;
                 this.continuous_anim=continuous_anim;

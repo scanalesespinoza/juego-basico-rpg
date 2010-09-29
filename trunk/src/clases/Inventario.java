@@ -5,6 +5,9 @@
 
 package clases;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author gerald
@@ -12,16 +15,25 @@ package clases;
 public class Inventario {
 
     private short idPersonaje;
+    private String nombre;
     private short idObjeto;
     private short cantidad;
-    private boolean estaEquipado;
+    private short estaEquipado;
 
-    public Inventario(short idPersonaje) {
-        this.idPersonaje = idPersonaje;
+    private dbDelegate conect = new dbDelegate();
+
+    public Inventario() {
         //Buscar los objetos que tiene asociado el personaje segun la ID entregada
     }
 
-
+    public boolean comparaItem(short idJugador, short idNpc) throws SQLException{
+        boolean tiene =false;
+        ResultSet rs =conect.comparaInvetario(idJugador, idNpc);
+        if(rs.next()){
+            tiene=true;
+        }
+        return tiene;
+    }
     public short getCantidad() {
         return cantidad;
     }
@@ -30,13 +42,14 @@ public class Inventario {
         this.cantidad = cantidad;
     }
 
-    public boolean isEstaEquipado() {
+    public short getEstaEquipado() {
         return estaEquipado;
     }
 
-    public void setEstaEquipado(boolean estaEquipado) {
+    public void setEstaEquipado(short estaEquipado) {
         this.estaEquipado = estaEquipado;
     }
+
 
     public short getIdObjeto() {
         return idObjeto;
@@ -52,6 +65,14 @@ public class Inventario {
 
     public void setIdPersonaje(short idPersonaje) {
         this.idPersonaje = idPersonaje;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 
