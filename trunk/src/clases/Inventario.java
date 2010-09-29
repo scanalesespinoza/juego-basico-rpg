@@ -32,8 +32,14 @@ public class Inventario {
         if(rs.next()){
             tiene=true;
         }
+        System.out.println("Tiene: "+tiene);
         return tiene;
     }
+
+    public void agregarItem(short idJugador, short idItem,short cantidad) throws SQLException{
+        conect.agregarItem(idJugador, idItem, cantidad);
+    }
+
     public short getCantidad() {
         return cantidad;
     }

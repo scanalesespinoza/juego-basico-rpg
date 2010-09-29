@@ -13,14 +13,15 @@ import jgame.*;
  */
 public class Jugador extends Personaje {
     private Inventario[] inv;
+    public Encargo encargos;
     private short idJugador;
     public Jugador(double x, double y, double speed, short idPj, String nombrePj, short nivelPj, short tipoPj) throws SQLException {
         super(x, y, speed, idPj, nombrePj, nivelPj, tipoPj);
         this.idJugador=idPj;
         //Instancia un ventario del jugador
         cargaInventario(idPj);
-        //Instancia misiones del jugador
-
+        //Instancia encargo del jugador
+        encargos = new Encargo(idPj);
         //Instancia habilidades del jugador
     }
 
@@ -76,31 +77,35 @@ public class Jugador extends Personaje {
         
     }
 
-    private void cargaInventario(short idPj) throws SQLException{
+    public void cargaInventario(short idPj) throws SQLException{
 
+        ResultSet rTamanoInventario=conect.obtieneTamanoInvetario(idPj);
         ResultSet rInventario=conect.obtieneInvetario(idPj);
         System.out.println("CargaIventario");
-        if(rInventario.next()){
-            inv = new Inventario[rInventario.getInt("filas")];
-            System.out.println("rInventario.getInt('filas')"+rInventario.getInt("filas"));
-            System.out.println("Largo Inv: "+inv.length);
-            
-            for(int i=0;i<inv.length;i++){
-                System.out.println("Indice: "+i);
-                System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
-                inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
-                System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
-
-                System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
-                inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
-                System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
-                inv[i].setCantidad(rInventario.getShort("cantidad"));
-                System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));
-                inv[i].setEstaEquipado(rInventario.getShort("estaEquipado"));
-                System.out.println("rInventario.getString('nombre')"+rInventario.getString("nombre"));
-                inv[i].setNombre(rInventario.getString("nombre"));
-            }
+        if(rTamanoInventario.next()){
+            inv = new Inventario[rTamanoInventario.getInt("filas")];
+            //System.out.println("rInventario.getInt('filas')"+rInventario.getInt("filas"));
+            //System.out.println("Largo Inv: "+inv.length);
         }
+        int i=0;
+        while(rInventario.next()){
+            inv[i] = new Inventario();
+            System.out.println("Indice: "+i);
+            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
+            inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
+            System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
+
+            System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
+            inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
+            System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
+            inv[i].setCantidad(rInventario.getShort("cantidad"));
+            System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));
+            inv[i].setEstaEquipado(rInventario.getShort("estaEquipado"));
+            System.out.println("rInventario.getString('nombre')"+rInventario.getString("nombre"));
+            inv[i].setNombre(rInventario.getString("nombre"));
+            i+=1;
+        }
+
     }
 
 

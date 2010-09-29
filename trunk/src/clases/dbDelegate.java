@@ -187,12 +187,25 @@ public class dbDelegate {
     }
 
     public ResultSet obtieneInvetario(short id){
-        String StrSql = "SELECT count(inv.idPersonaje) filas,inv.idPersonaje idPersonaje, inv.idObjeto idObjeto, inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  FROM inventario inv, objeto obj WHERE inv.idPersonaje="+id+" AND inv.idObjeto=obj.idObjeto group by inv.idPersonaje";
+        String StrSql = "SELECT inv.idPersonaje idPersonaje, inv.idObjeto idObjeto, inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  FROM inventario inv, objeto obj WHERE inv.idPersonaje="+id+" AND inv.idObjeto=obj.idObjeto";
         ResultSet inventario = null;
         try{
             Statement st = conn.createStatement();
             inventario = st.executeQuery(StrSql);
          
+        }
+        catch(SQLException ex) {
+        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+        }
+        return inventario;
+    }
+    public ResultSet obtieneTamanoInvetario(short id){
+        String StrSql = "SELECT count(idPersonaje) filas FROM inventario WHERE idPersonaje="+id+" group by idPersonaje";
+        ResultSet inventario = null;
+        try{
+            Statement st = conn.createStatement();
+            inventario = st.executeQuery(StrSql);
+
         }
         catch(SQLException ex) {
         System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
@@ -214,17 +227,25 @@ public class dbDelegate {
         return inventario;
     }
 
+    public void agregarItem(short idJugador, short idItem,short cantidad) throws SQLException{
+        ResultSet rs = Consulta("SELECT * FROM inventario WHERE idPersonaje="+idJugador+" AND idObjeto="+idItem);
+        if(rs.next()){
+            short vCantiadad = (short)(rs.getShort("cantidad")+cantidad);
+            int insertInventarioPj = Ejecutar("Update inventario set cantidad="+vCantiadad+" WHERE idPersonaje="+idJugador+" AND idObjeto="+idItem);
+        }else{
+            int insertInventarioPj = Ejecutar("INSERT INTO inventario VALUES ("+idJugador+","+idItem+","+cantidad+",0)");
+        }
+    }
 
-
-    public String Ejecutar(String sql) {
-        String error = "";
+    public int Ejecutar(String sql) {
+        int resultado=0;
         try {
             St = conn.createStatement();
-            St.execute(sql);
+            resultado = St.executeUpdate(sql);
         } catch (Exception ex) {
-            error = ex.getMessage();
+            System.out.println(ex.getMessage());
         }
-        return (error);
+        return (resultado);
     }
 
     public ResultSet Consulta(String sql) {

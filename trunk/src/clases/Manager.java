@@ -1,12 +1,14 @@
 package clases;
 
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jgame.JGColor;
 import jgame.JGFont;
 import jgame.JGPoint;
 import jgame.platform.*;
 import java.util.HashMap;
-import jgame.JGTimer;
 
 
 /**
@@ -47,6 +49,17 @@ public class Manager extends JGEngine{
     public Npc arbol2;
     public Npc pileta;
 
+
+    /*
+     * Variables para probar funcionalidad "Realizar Mision"
+     */
+    public boolean hongo1=false;
+    public boolean hongo2=false;
+    public boolean hongo3=false;
+    public boolean hongo4=false;
+    public boolean hongo5=false;
+    public boolean finHongos=false;
+    public int tiempoMensaje=0;
 
 
     private HashMap hsDatosPersonaje = new HashMap();//Mapa de datos utilizado para cargar un Jugador cuando su objeto no ha sido instanciado o fue removido
@@ -155,11 +168,11 @@ public class Manager extends JGEngine{
                                 "+!..%%%%%%%%%%%%%%%%%%%%%%%%%%%....*****...!!!..!!!!!!!!!...*****.............^+",
                                 "+!....%%%%%%%%%%%%%%^%%%%%%%%%%%...*****....................*****.............^+",//15
                                 "+!^................................*****..^^^^^^............*****.......^^^^^^^+",
-                                "|******************************************************************************|",
-                                "|******************************************************************************|",
-                                "|******************************************************************************|",
-                                "|******************************************************************************|",//20
-                                "|******************************************************************************|",
+                                "+!*****************************************************************************|",
+                                "+!*****************************************************************************|",
+                                "+!*****************************************************************************|",
+                                "+!*****************************************************************************|",//20
+                                "+!*****************************************************************************|",
                                 "+!.................................**********..................................+",
                                 "+!.................................*****.*****.................................+",
                                 "+!..!!!!!!!!!!!!!!....^............*****..*****................................+",
@@ -223,7 +236,7 @@ public class Manager extends JGEngine{
             System.out.println(pj.npcInterac.getNomNpc()+"Npc");
             try{
             casa1 = new Npc(viewXOfs()+380,viewYOfs()+120,pj.npcInterac.getNomNpc()+"Npc",pj.npcInterac.getNomNpc()+"Npc",51,51, (short) (pj.npcInterac.getIdNpc()),pj.npcInterac.obtieneDialogo());
-            casa1.realizaTarea(idJugador);
+            casa1.realizaTarea(pj);
             }
             catch(Exception ex){
                 System.out.println("Extrae datos del HashMap: "+ex);
@@ -299,6 +312,80 @@ public class Manager extends JGEngine{
             
             ventanaDialogo(pj.npcInterac.obtieneDialogo());
         }
+
+
+        /*
+         * Detecta si has encontrado un hongo para la mision
+         */
+
+        if((pj.x==880.0)&&(pj.y==400.0)&&(!hongo1)){
+            hongo1=true;
+            tiempoMensaje=120;
+            try {
+                Inventario[] tempInv = pj.getInv();
+                tempInv[0].agregarItem(pj.getIdJugador(),(short)1000,(short)1);
+                pj.cargaInventario(pj.getIdJugador());
+                menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
+            } catch (SQLException ex) {
+                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if((pj.x==928)&&(pj.y==144)&&(!hongo2)){
+            hongo2=true;
+            tiempoMensaje=120;          
+            try {
+                Inventario[] tempInv = pj.getInv();
+                tempInv[0].agregarItem(pj.getIdJugador(),(short)1000,(short)1);
+                pj.cargaInventario(pj.getIdJugador());
+                menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
+            } catch (SQLException ex) {
+                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if((pj.x==80)&&(pj.y==48)&&(!hongo3)){
+            hongo3=true;
+            tiempoMensaje=120;
+            try {
+                Inventario[] tempInv = pj.getInv();
+                tempInv[0].agregarItem(pj.getIdJugador(),(short)1000,(short)1);
+                pj.cargaInventario(pj.getIdJugador());
+                menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
+            } catch (SQLException ex) {
+                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if((pj.x==416)&&(pj.y==624)&&(!hongo4)){
+            hongo4=true;
+            tiempoMensaje=120;
+            try {
+                Inventario[] tempInv = pj.getInv();
+                tempInv[0].agregarItem(pj.getIdJugador(),(short)1000,(short)1);
+                pj.cargaInventario(pj.getIdJugador());
+                menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
+            } catch (SQLException ex) {
+                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if((pj.x==64)&&(pj.y==800)&&(!hongo5)){
+            hongo5=true;
+            tiempoMensaje=120;
+            try {
+                Inventario[] tempInv = pj.getInv();
+                tempInv[0].agregarItem(pj.getIdJugador(),(short)1000,(short)1);
+                pj.cargaInventario(pj.getIdJugador());
+                menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
+            } catch (SQLException ex) {
+                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if((hongo1)&&(hongo2)&&(hongo3)&&(hongo4)&&(hongo5)&&(!finHongos)){
+            finHongos=true;
+        }
+        if(tiempoMensaje>0){
+            menu.ventanaAlert("Has encontrado Hongo x1");
+            
+        }
+        tiempoMensaje--;
     }
 
     /*

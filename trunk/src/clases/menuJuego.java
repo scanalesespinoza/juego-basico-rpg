@@ -4,6 +4,9 @@
  */
 package clases;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jgame.JGColor;
 import jgame.JGFont;
 import jgame.JGObject;
@@ -53,10 +56,12 @@ public class menuJuego extends JGObject {
 
 
             eng.setColor(JGColor.black);
-            eng.setFont(new JGFont("Arial",0,10));
+            eng.setFont(new JGFont("Arial",0,20));
 
-            eng.drawString("Coordenada X: "+pj.x+" Coordenada Y: "+pj.y, eng.viewWidth()/2, 420, 0);
-            eng.drawString("Presiona Escape para salir del Juego ", eng.viewWidth()/2, 440, 0);
+            //eng.drawString("Coordenada X: "+pj.x+" Coordenada Y: "+pj.y, eng.viewWidth()/2, 420, 0);
+            eng.drawString("Bienvenido al Mundo de BRPG(Demo)", eng.viewWidth()/2, 420, 0);
+            eng.setFont(new JGFont("Arial",0,10));
+            eng.drawString("Presiona Escape para salir del Juego ", eng.viewWidth()/2, 450, 0);
 
 
             switch(menu){
@@ -100,14 +105,19 @@ public class menuJuego extends JGObject {
                     eng.setFont(new JGFont("Arial",0,14));
                     eng.drawString("Inventario", eng.viewWidth()-45, 10, 0);
                     eng.setFont(new JGFont("Arial",0,10));
+                    int cont=1;
                     for(int i=0;i<inventario.length;i++){
+                        cont+=i;
                         if(inventario[i].getEstaEquipado()==0){equipado="No";}else{equipado="Si";}
-                        eng.drawString("-N°: "+i+1+" -Nombre: "+inventario[i].getNombre(), eng.viewWidth()-45, 30+i*10, 0);
-                        eng.drawString("Cantidad: "+inventario[i].getCantidad()+" -Equipado: "+equipado, eng.viewWidth()-45, 30+i*10, 0);
+                        eng.drawString("-N°: "+cont, eng.viewWidth()-45, 30+i*50, 0);
+                        eng.drawString("-Nombre: "+inventario[i].getNombre(), eng.viewWidth()-45, 40+i*50, 0);
+                        eng.drawString("-Equipado: "+equipado, eng.viewWidth()-45, 50+i*50, 0);
+                        eng.drawString("-Cantidad: "+inventario[i].getCantidad(), eng.viewWidth()-45, 60+i*50, 0);
+                        eng.drawString("--------------------", eng.viewWidth()-45, 70+i*50, 0);
                     }
                     eng.setFont(new JGFont("Arial",0,10));
-                    eng.drawString("[-Descripción:    ]", eng.viewWidth()-45, 100, 0);
-                    eng.drawString("[-Eliminar objeto:]", eng.viewWidth()-45, 120, 0);
+                    eng.drawString("[-Descripción:    ]", eng.viewWidth()-45, 270, 0);
+                    eng.drawString("[-Eliminar objeto:]", eng.viewWidth()-45, 280, 0);
                     break;
                 case 4/*"estadistica"*/:
                     eng.setFont(new JGFont("Arial",0,14));
@@ -161,6 +171,20 @@ public class menuJuego extends JGObject {
             eng.drawString("Confirmar [ENTER]", eng.viewWidth()/2,eng.viewHeight()/2+65, 0);
 
     }
+
+    public void ventanaAlert(String mensaje){
+            eng.setColor(JGColor.red);
+            eng.drawRect(eng.viewXOfs()+200,eng.viewYOfs()+250,300,100, true, false);
+            eng.setColor(JGColor.white);
+            eng.drawRect(eng.viewXOfs()+205,eng.viewYOfs()+255,290,90, true, false);
+
+
+            eng.setColor(JGColor.red);
+            eng.setFont(new JGFont("Arial",0,16));
+            eng.drawString(mensaje, eng.viewWidth()/2,eng.viewHeight()/2+45, 0);
+
+    }
+
 
     public Jugador getPj() {
         return pj;

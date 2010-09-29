@@ -6,21 +6,53 @@
 package clases;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
  * @author gerald
  */
 public class Encargo {
-private short idPersonaje;
+    public Encargo[] encargos;
+
+    private short idPersonaje;
 
     private short idMision;
 
     private Date fechaComienzo;
-    private boolean rolPersonaje;
+
+    private short rolPersonaje;
 
     private Date fechaFin;
 
+    private dbDelegate conect = new dbDelegate();
+
+    public Encargo(short idPj){
+        this.idPersonaje=idPj;
+    }
+
+    public void cargaEncargos() throws SQLException{
+
+        ResultSet rCantidadEncargos=conect.Consulta("SELECT count(idPersonaje) filas FROM encargo WHERE idPersonaje="+this.getIdPersonaje());
+        ResultSet rEncargos=conect.Consulta("SELECT * FROM encargo WHERE idPersonaje="+this.getIdPersonaje());
+        System.out.println("Carga Encargos");
+        if(rCantidadEncargos.next()){
+            encargos = new Encargo[rCantidadEncargos.getInt("filas")];
+        }
+        int i=0;
+        while(rEncargos.next()){
+            encargos[i] = new Encargo(this.getIdPersonaje());
+            encargos[i].setIdPersonaje(rEncargos.getShort("idPeronsaje"));
+            encargos[i].setIdMision(rEncargos.getShort("idMision"));
+            encargos[i].setFechaComienzo(rEncargos.getDate("fechaComienzo"));
+            encargos[i].setRolPersonaje(rEncargos.getShort("rolPersonaje"));
+            encargos[i].setFechaFin(rEncargos.getDate("fechaFin"));
+
+            i+=1;
+        }
+
+    }
     public Date getFechaComienzo() {
         return fechaComienzo;
     }
@@ -53,13 +85,15 @@ private short idPersonaje;
         this.idPersonaje = idPersonaje;
     }
 
-    public boolean isRolPersonaje() {
+    public short getRolPersonaje() {
         return rolPersonaje;
     }
 
-    public void setRolPersonaje(boolean rolPersonaje) {
+    public void setRolPersonaje(short rolPersonaje) {
         this.rolPersonaje = rolPersonaje;
     }
+
+
 
     
 }
