@@ -91,12 +91,12 @@ public class Jugador extends Personaje {
         while(rInventario.next()){
             inv[i] = new Inventario();
             System.out.println("Indice: "+i);
-            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
-            inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
+            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("Personaje_id"));
+            inv[i].setIdPersonaje(rInventario.getShort("Personaje_id"));
             System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
 
-            System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
-            inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
+            System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("Objeto_id"));
+            inv[i].setIdObjeto(rInventario.getShort("Objeto_id"));
             System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
             inv[i].setCantidad(rInventario.getShort("cantidad"));
             System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));

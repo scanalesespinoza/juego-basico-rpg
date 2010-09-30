@@ -10,10 +10,10 @@ import java.util.HashMap;
  */
 public class dbDelegate {
 
-   static final String bd = "db_trabajo_titulo";
+   static final String bd = "db_web_tt2";
    static final String login = "root";
-   static final String password = "gwdesarrollo";
-   static String url = "jdbc:mysql://getway.sytes.net:3306/"+bd;
+   static final String password = "Vicarious";
+   static String url = "jdbc:mysql://localhost:3306/"+bd;
    private Statement St;
    private ResultSet reg;
 
@@ -49,7 +49,15 @@ public class dbDelegate {
     public HashMap obtieneDatosPersonaje(short id){
         System.out.println("Inicio obtiene datos personaje");
         HashMap hs = new HashMap();
-        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
+        String StrSql = "SELECT pjuno.id id, pjuno.nombre nombre, "+
+                               "pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, "+
+                               "pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, "+
+                               "pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, "+
+                               "pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, "+
+                               "pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, "+
+                               "pjdos.estaBaneado ban, pjdos.Cuenta_id cuenta"
+                        +" FROM personaje pjuno, jugador pjdos"+
+                        " WHERE pjuno.id="+id+" and pjdos.personaje_id="+id;
         try{
             Statement st = conn.createStatement();
             //System.out.println("Crea stamento");
@@ -91,7 +99,15 @@ public class dbDelegate {
 
     public short[] obtienePosPersonaje(short id){
         short pos[]=null;
-        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
+        String StrSql = "SELECT pjuno.id id, pjuno.nombre nombre, pjuno.nivel nivel, "+
+                               "pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, "+
+                               "pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, "+
+                               "pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, "+
+                               "pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, "+
+                               "pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.estaBaneado ban, "+
+                               "pjdos.Cuenta_id cuenta "+
+                          "FROM personaje pjuno, jugador pjdos "+
+                         "WHERE pjuno.id="+id+" and pjdos.id="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
@@ -109,7 +125,9 @@ public class dbDelegate {
 
     public HashMap datosConstruyePersonaje(short id){
         HashMap dataIni=new HashMap();
-        String StrSql = "SELECT nombre, nivel, posicionX posX, posicionY posY, tipo FROM personaje WHERE idPersonaje="+id;
+        String StrSql = "SELECT nombre, nivel, posicionX posX, posicionY posY, tipo "+
+                          "FROM personaje "+
+                         "WHERE id="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
@@ -132,12 +150,12 @@ public class dbDelegate {
 
     public HashMap datosMision(short id){
         HashMap dataIni=new HashMap();
-        String StrSql = "SELECT * FROM mision WHERE idPersonajeConcluyeMision="+id;
+        String StrSql = "SELECT * FROM mision WHERE personaje_id="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
             if (res.next()) {
-              dataIni.put("idMision",res.getShort("idMision"));
+              dataIni.put("idMision",res.getShort("id"));
               //System.out.println("nombre: "+res.getString("nombre"));
               dataIni.put("nomMision",res.getString("nombre"));
               //System.out.println("nivel: "+res.getShort("nivel"));
@@ -158,7 +176,10 @@ public class dbDelegate {
         System.out.println("ID :"+id);
         System.out.println("X :"+posicionX);
         System.out.println("Y :"+posicionY);
-        String StrSql = "UPDATE personaje SET posicionX=" + posicionX + ", posicionY=" + posicionY + " WHERE idPersonaje="+id;
+        String StrSql = "UPDATE personaje "+
+                           "SET posicionX=" + posicionX +
+                             ", posicionY=" + posicionY +
+                        " WHERE id="+id;
         try{
             Statement st = conn.createStatement();
             int actualizadas = st.executeUpdate(StrSql);
@@ -187,7 +208,10 @@ public class dbDelegate {
     }
 
     public ResultSet obtieneInvetario(short id){
-        String StrSql = "SELECT inv.idPersonaje idPersonaje, inv.idObjeto idObjeto, inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  FROM inventario inv, objeto obj WHERE inv.idPersonaje="+id+" AND inv.idObjeto=obj.idObjeto";
+        String StrSql = "SELECT inv.Personaje_id idPersonaje, inv.Objeto_id idObjeto, "+
+                               "inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  "+
+                          "FROM inventario inv, objeto obj "+
+                         "WHERE inv.personaje_id="+id+" AND inv.Objeto_id=obj.id";
         ResultSet inventario = null;
         try{
             Statement st = conn.createStatement();
@@ -200,7 +224,10 @@ public class dbDelegate {
         return inventario;
     }
     public ResultSet obtieneTamanoInvetario(short id){
-        String StrSql = "SELECT count(idPersonaje) filas FROM inventario WHERE idPersonaje="+id+" group by idPersonaje";
+        String StrSql = "SELECT count(Personaje_id) filas "+
+                         " FROM inventario "+
+                         "WHERE Personaje_id="+id+
+                        " GROUP BY Personaje_id";
         ResultSet inventario = null;
         try{
             Statement st = conn.createStatement();
@@ -214,7 +241,13 @@ public class dbDelegate {
     }
 
     public ResultSet comparaInvetario(short idJugador, short idNpc){
-        String StrSql = "SELECT invuno.cantidad  FROM inventario invuno, inventario invdos  WHERE invuno.idPersonaje="+idJugador+" AND invdos.idPersonaje="+idNpc+" AND invuno.idObjeto=invdos.idObjeto AND invuno.cantidad>invdos.cantidad-1";
+        String StrSql = "SELECT invuno.cantidad "+
+                         " FROM inventario invuno, inventario invdos  "+
+                         "WHERE invuno.Personaje_id="+idJugador+
+                          " AND invdos.Personaje_id="+idNpc+
+                          " AND invuno.Objeto_id=invdos.Objeto_id"+
+                          " AND invuno.cantidad>invdos.cantidad-1";
+
         ResultSet inventario = null;
         try{
             Statement st = conn.createStatement();
@@ -228,10 +261,15 @@ public class dbDelegate {
     }
 
     public void agregarItem(short idJugador, short idItem,short cantidad) throws SQLException{
-        ResultSet rs = Consulta("SELECT * FROM inventario WHERE idPersonaje="+idJugador+" AND idObjeto="+idItem);
+        ResultSet rs = Consulta("SELECT * FROM inventario "+
+                                 "WHERE Personaje_id="+idJugador+
+                                  " AND objeto_id="+idItem);
         if(rs.next()){
             short vCantiadad = (short)(rs.getShort("cantidad")+cantidad);
-            int insertInventarioPj = Ejecutar("Update inventario set cantidad="+vCantiadad+" WHERE idPersonaje="+idJugador+" AND idObjeto="+idItem);
+            int insertInventarioPj = Ejecutar("Update inventario "+
+                                                 "set cantidad="+vCantiadad+
+                                              " WHERE Personaje_id="+idJugador+
+                                              "   AND Objeto_id="+idItem);
         }else{
             int insertInventarioPj = Ejecutar("INSERT INTO inventario VALUES ("+idJugador+","+idItem+","+cantidad+",0)");
         }

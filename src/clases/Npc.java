@@ -89,25 +89,28 @@ public class Npc extends StdDungeonMonster  {
             catch(Exception ex){
                 System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
             }
-            ResultSet encargo=conect.Consulta("SELECT * FROM encargo WHERE idPersonaje="+pj.getIdJugador()+" AND idMision="+String.valueOf(datosPj.get("idMision")));
+            ResultSet encargo=conect.Consulta("SELECT * FROM encargo "+
+                                               "WHERE Personaje_id="+pj.getIdJugador()+
+                                               "  AND mision_id="+String.valueOf(datosPj.get("idMision")));
             
             if(!encargo.next()){
                 System.out.println("Registrar Encargo ");
-                int insertar=conect.Ejecutar("INSERT INTO encargo (idPersonaje,idMision,fechaComienzo,rolPersonaje,fechaFin) VALUES ("+pj.getIdJugador()+","+String.valueOf(datosPj.get("idMision"))+",'"+annio+"/"+mes+"/"+dia+"',0,"+null+")");
+                int insertar=conect.Ejecutar("INSERT INTO encargo (Personaje_id,Mision_id,created_at,rolPersonaje,updated_at)"+
+                                            " VALUES ("+pj.getIdJugador()+","+String.valueOf(datosPj.get("idMision"))+",'"+annio+"/"+mes+"/"+dia+"',0,"+null+")");
                 System.out.println("Insertar encargo filas: "+insertar);
 
             }else{
-                System.out.println("fechaFin"+encargo.getDate("fechaFin"));
-                if(encargo.getDate("fechaFin")==null){
+                System.out.println("fechaFin"+encargo.getDate("updated_at"));
+                if(encargo.getDate("updated_at")==null){
                     System.out.println("fechaFin");
                     Inventario cInv = new Inventario();
                     boolean finMision=cInv.comparaItem(pj.getIdJugador(), idNpc);
                     if(finMision){
                         System.out.println("Fin mision");
-                        int updateEncargo = conect.Ejecutar("Update encargo set fechaFin='" + annio + "/" + mes + "/" + dia + "' WHERE idPersonaje=" + pj.getIdJugador() + " AND idMision=" + encargo.getShort("idMision"));
+                        int updateEncargo = conect.Ejecutar("Update encargo set updated_at='" + annio + "/" + mes + "/" + dia + "' WHERE Personaje_id=" + pj.getIdJugador() + " AND Mision_id=" + encargo.getShort("Mision_id"));
                         int insertInventarioPj = conect.Ejecutar("INSERT INTO inventario VALUES ("+pj.getIdJugador()+",1,1,0)");
                         
-                        int retornoDelete = conect.Ejecutar("DELETE FROM inventario WHERE idPersonaje="+pj.getIdJugador()+" AND idObjeto="+inv[0].getIdObjeto()+" AND cantidad="+inv[0].getCantidad());
+                        int retornoDelete = conect.Ejecutar("DELETE FROM inventario WHERE Personaje_id="+pj.getIdJugador()+" AND Objeto_id="+inv[0].getIdObjeto()+" AND cantidad="+inv[0].getCantidad());
                         if(retornoDelete==0){
                            Inventario[] pjInv = pj.getInv();
                            short cantidad=1;
@@ -116,7 +119,7 @@ public class Npc extends StdDungeonMonster  {
                                     cantidad= (short)(pjInv[j].getCantidad()-inv[0].getCantidad());
                                 }
                            }
-                           int retornoUpdate = conect.Ejecutar("Update inventario SET cantidad="+cantidad+" WHERE idPersonaje="+pj.getIdJugador()+" AND idObjeto="+inv[0].getIdObjeto());
+                           int retornoUpdate = conect.Ejecutar("Update inventario SET cantidad="+cantidad+" WHERE Personaje_id="+pj.getIdJugador()+" AND Objeto_id="+inv[0].getIdObjeto());
                            System.out.println("Filas afectadas Update cantidad: "+retornoUpdate);
                         }
                         System.out.println("Filas afectadas Delete: "+retornoDelete);
@@ -157,12 +160,12 @@ public class Npc extends StdDungeonMonster  {
         while(rInventario.next()){
             inv[i] = new Inventario();
             System.out.println("Indice: "+i);
-            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
-            inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
+            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("Personaje_id"));
+            inv[i].setIdPersonaje(rInventario.getShort("Personaje_id"));
             System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
 
             System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
-            inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
+            inv[i].setIdObjeto(rInventario.getShort("Objeto_id"));
             System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
             inv[i].setCantidad(rInventario.getShort("cantidad"));
             System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));

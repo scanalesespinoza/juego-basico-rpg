@@ -22,7 +22,7 @@ public class Manager extends JGEngine{
      * principal del personaje que ha seleccionado el usuario para jugar.
      * Permite en una misma sesion de juego recuperar, actualizar y desconectar al personaje Jugador.
      */
-    private short idJugador = 1;//Valor en duro, debiera recibirse como parametro desde el sitio web
+    private short idJugador = 4;//Valor en duro, debiera recibirse como parametro desde el sitio web
     private int interactuar = 0;//0=Jugador presente en el juego/1=Jugador ausente e interactuando con Npc/>0 Ejecutando dialogo y acciones de Npc
     private String nomNpcInteractuar;
     public int pausa = 0;// Modo de evitar que se ejecuten acciones por los 60 frames que ocurren por segundo
