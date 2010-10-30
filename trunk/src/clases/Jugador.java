@@ -19,11 +19,12 @@ public class Jugador extends Personaje {
         super(x, y, speed, idPj, nombrePj, nivelPj, tipoPj);
         this.idJugador=idPj;
         //Instancia un ventario del jugador
-        cargaInventario(idPj);
+        //cargaInventario(idPj);
         //Instancia encargo del jugador
-        encargos = new Encargo(idPj);
+       // encargos = new Encargo(idPj);
         //Instancia habilidades del jugador
     }
+    
 
     private short vitalidad;
     private short destreza;
@@ -42,33 +43,37 @@ public class Jugador extends Personaje {
 
     public Npc npcInterac;
 
+    public Jugador() {
+        //throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 
     /*
      * Carga datos del personaje
      */
-    public void cargaDatosPj(){
-        System.out.println("cargaDatosPj"+getIdPersonaje());
-        HashMap datosPj = new HashMap();
-        //Carga datos del jugador desde la base de datos
-        try{
-            datosPj=conect.obtieneDatosPersonaje(getIdPersonaje());
-        }
-        catch(Exception ex){
-            System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
-        }
-
-        this.setIdPersonaje((Short.valueOf(datosPj.get("id").toString())));
-        this.setVitalidad((Short.valueOf(datosPj.get("vit").toString())));
-        this.setDestreza((Short.valueOf(datosPj.get("des").toString())));
-        this.setSabiduria((Short.valueOf(datosPj.get("sab").toString())));
-        this.setFuerza((Short.valueOf(datosPj.get("fue").toString())));
-        this.setTotalPuntosHabilidad((Short.valueOf(datosPj.get("ptosHab").toString())));
-        this.setTotalPuntosEstadistica((Short.valueOf(datosPj.get("ptosEst").toString())));
-        this.setLimiteSuperiorExperiencia(Integer.parseInt(datosPj.get("limExp").toString()));
-        this.setExperiencia(Integer.parseInt(datosPj.get("experiencia").toString()));
-        this.setPesoSoportado(Integer.parseInt(datosPj.get("peso").toString()));
-
-    }
+//    public void cargaDatosPj(){
+//        System.out.println("cargaDatosPj"+getIdPersonaje());
+//        HashMap datosPj = new HashMap();
+//        //Carga datos del jugador desde la base de datos
+//        try{
+//            datosPj=conect.obtieneDatosPersonaje(getIdPersonaje());
+//        }
+//        catch(Exception ex){
+//            System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
+//        }
+//
+//        this.setIdPersonaje((Short.valueOf(datosPj.get("id").toString())));
+//        this.setVitalidad((Short.valueOf(datosPj.get("vit").toString())));
+//        this.setDestreza((Short.valueOf(datosPj.get("des").toString())));
+//        this.setSabiduria((Short.valueOf(datosPj.get("sab").toString())));
+//        this.setFuerza((Short.valueOf(datosPj.get("fue").toString())));
+//        this.setTotalPuntosHabilidad((Short.valueOf(datosPj.get("ptosHab").toString())));
+//        this.setTotalPuntosEstadistica((Short.valueOf(datosPj.get("ptosEst").toString())));
+//        this.setLimiteSuperiorExperiencia(Integer.parseInt(datosPj.get("limExp").toString()));
+//        this.setExperiencia(Integer.parseInt(datosPj.get("experiencia").toString()));
+//        this.setPesoSoportado(Integer.parseInt(datosPj.get("peso").toString()));
+//
+//    }
 
   /*
    * Salva los datos del Jugador a la base de datos
@@ -77,7 +82,7 @@ public class Jugador extends Personaje {
         
     }
 
-    public void cargaInventario(short idPj) throws SQLException{
+    /*public void cargaInventario(short idPj) throws SQLException{
 
         ResultSet rTamanoInventario=conect.obtieneTamanoInvetario(idPj);
         ResultSet rInventario=conect.obtieneInvetario(idPj);
@@ -106,7 +111,7 @@ public class Jugador extends Personaje {
             i+=1;
         }
 
-    }
+    }*/
 
 
     @Override

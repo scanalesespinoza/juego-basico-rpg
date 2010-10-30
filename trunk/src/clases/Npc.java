@@ -37,7 +37,7 @@ public class Npc extends StdDungeonMonster  {
             this.nomNpc=name;
             this.colId=colId;
             System.out.println("contruye NPC");
-            cargaInventario(idNpc);
+            //cargaInventario(idNpc);
             System.out.println("Inventario Npc Cargado");
 
          
@@ -63,7 +63,7 @@ public class Npc extends StdDungeonMonster  {
         return dialogo;
     }
 
-    public void realizaTarea(Jugador pj) throws SQLException{
+    /*public void realizaTarea(Jugador pj) throws SQLException{
         c1 = Calendar.getInstance();
         String dia = Integer.toString(c1.get(Calendar.DATE));
         String mes = Integer.toString(c1.get(Calendar.MONTH));
@@ -89,25 +89,25 @@ public class Npc extends StdDungeonMonster  {
             catch(Exception ex){
                 System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
             }
-            ResultSet encargo=conect.Consulta("SELECT * FROM encargo WHERE idPersonaje="+pj.getIdJugador()+" AND idMision="+String.valueOf(datosPj.get("idMision")));
+            ResultSet encargo=conect.Consulta("SELECT * FROM encargo WHERE personaje_id="+pj.getIdJugador()+" AND mision_id="+String.valueOf(datosPj.get("idMision")));
             
             if(!encargo.next()){
                 System.out.println("Registrar Encargo ");
-                int insertar=conect.Ejecutar("INSERT INTO encargo (idPersonaje,idMision,fechaComienzo,rolPersonaje,fechaFin) VALUES ("+pj.getIdJugador()+","+String.valueOf(datosPj.get("idMision"))+",'"+annio+"/"+mes+"/"+dia+"',0,"+null+")");
+                int insertar=conect.Ejecutar("INSERT INTO encargo (personaje_id,Mision_id,created_at,rolPersonaje,updated_at) VALUES ("+pj.getIdJugador()+","+String.valueOf(datosPj.get("idMision"))+",'"+annio+"/"+mes+"/"+dia+"',0,"+null+")");
                 System.out.println("Insertar encargo filas: "+insertar);
 
             }else{
                 System.out.println("fechaFin"+encargo.getDate("fechaFin"));
-                if(encargo.getDate("fechaFin")==null){
+                if(encargo.getDate("updated_at")==null){
                     System.out.println("fechaFin");
                     Inventario cInv = new Inventario();
                     boolean finMision=cInv.comparaItem(pj.getIdJugador(), idNpc);
                     if(finMision){
                         System.out.println("Fin mision");
-                        int updateEncargo = conect.Ejecutar("Update encargo set fechaFin='" + annio + "/" + mes + "/" + dia + "' WHERE idPersonaje=" + pj.getIdJugador() + " AND idMision=" + encargo.getShort("idMision"));
+                        int updateEncargo = conect.Ejecutar("Update encargo set updated_at='" + annio + "/" + mes + "/" + dia + "' WHERE Personaje_id=" + pj.getIdJugador() + " AND Mision_id=" + encargo.getShort("Mision_id"));
                         int insertInventarioPj = conect.Ejecutar("INSERT INTO inventario VALUES ("+pj.getIdJugador()+",1,1,0)");
                         
-                        int retornoDelete = conect.Ejecutar("DELETE FROM inventario WHERE idPersonaje="+pj.getIdJugador()+" AND idObjeto="+inv[0].getIdObjeto()+" AND cantidad="+inv[0].getCantidad());
+                        int retornoDelete = conect.Ejecutar("DELETE FROM inventario WHERE Personaje_id="+pj.getIdJugador()+" AND Objeto_id="+inv[0].getIdObjeto()+" AND cantidad="+inv[0].getCantidad());
                         if(retornoDelete==0){
                            Inventario[] pjInv = pj.getInv();
                            short cantidad=1;
@@ -116,7 +116,7 @@ public class Npc extends StdDungeonMonster  {
                                     cantidad= (short)(pjInv[j].getCantidad()-inv[0].getCantidad());
                                 }
                            }
-                           int retornoUpdate = conect.Ejecutar("Update inventario SET cantidad="+cantidad+" WHERE idPersonaje="+pj.getIdJugador()+" AND idObjeto="+inv[0].getIdObjeto());
+                           int retornoUpdate = conect.Ejecutar("Update inventario SET cantidad="+cantidad+" WHERE Personaje_id="+pj.getIdJugador()+" AND Objeto_id="+inv[0].getIdObjeto());
                            System.out.println("Filas afectadas Update cantidad: "+retornoUpdate);
                         }
                         System.out.println("Filas afectadas Delete: "+retornoDelete);
@@ -143,7 +143,7 @@ public class Npc extends StdDungeonMonster  {
         
     }
 
-    private void cargaInventario(short idPj) throws SQLException{
+    /*private void cargaInventario(short idPj) throws SQLException{
 
         ResultSet rTamanoInventario=conect.obtieneTamanoInvetario(idPj);
         ResultSet rInventario=conect.obtieneInvetario(idPj);
@@ -172,7 +172,7 @@ public class Npc extends StdDungeonMonster  {
             i+=1;
         }
 
-    }
+    }*/
 
     @Override
     public void hit(JGObject obj){
