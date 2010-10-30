@@ -100,7 +100,7 @@ public class menuJuego extends JGObject {
                     eng.drawString("[-Eliminar mision:]", eng.viewWidth()-45, 120, 0);
                     break;
                 case 3/*"inventario"*/:
-                    Inventario[] inventario=pj.getInv();
+                    /*Inventario[] inventario=pj.getInv();
                     String equipado  = "";
                     eng.setFont(new JGFont("Arial",0,14));
                     eng.drawString("Inventario", eng.viewWidth()-45, 10, 0);
@@ -117,7 +117,7 @@ public class menuJuego extends JGObject {
                     }
                     eng.setFont(new JGFont("Arial",0,10));
                     eng.drawString("[-Descripción:    ]", eng.viewWidth()-45, 270, 0);
-                    eng.drawString("[-Eliminar objeto:]", eng.viewWidth()-45, 280, 0);
+                    eng.drawString("[-Eliminar objeto:]", eng.viewWidth()-45, 280, 0);*/
                     break;
                 case 4/*"estadistica"*/:
                     eng.setFont(new JGFont("Arial",0,14));

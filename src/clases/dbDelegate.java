@@ -10,10 +10,10 @@ import java.util.HashMap;
  */
 public class dbDelegate {
 
-   static final String bd = "db_trabajo_titulo";
+   static final String bd = "db_web_tt2";
    static final String login = "root";
-   static final String password = "gwdesarrollo";
-   static String url = "jdbc:mysql://getway.sytes.net:3306/"+bd;
+   static final String password = "Vicarious";
+   static String url = "jdbc:mysql://felhunter.sytes.net:3306/"+bd;
    private Statement St;
    private ResultSet reg;
 
@@ -46,70 +46,70 @@ public class dbDelegate {
         conn.close();
    }
 
-    public HashMap obtieneDatosPersonaje(short id){
-        System.out.println("Inicio obtiene datos personaje");
-        HashMap hs = new HashMap();
-        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
-        try{
-            Statement st = conn.createStatement();
-            //System.out.println("Crea stamento");
-            ResultSet res = st.executeQuery(StrSql);
-            //System.out.println("ejecuta query");
-            if (res.next()) {
-              //System.out.println("consulta primera fila");
-              //System.out.println("Obtiene ID: "+res.getString("id"));
+//    public HashMap obtieneDatosPersonaje(short id){
+//        System.out.println("Inicio obtiene datos personaje");
+//        HashMap hs = new HashMap();
+//        String StrSql = "SELECT pjuno.id id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.estaBaneado ban, pjdos.Cuenta_id cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.id="+id+" and pjdos.Personaje_id="+id;
+//        try{
+//            Statement st = conn.createStatement();
+//            //System.out.println("Crea stamento");
+//            ResultSet res = st.executeQuery(StrSql);
+//            //System.out.println("ejecuta query");
+//            if (res.next()) {
+//              //System.out.println("consulta primera fila");
+//              //System.out.println("Obtiene ID: "+res.getString("id"));
+//
+//              hs.put("id",res.getString("id"));
+//              System.out.println("ID guardada en el hashmap");
+//              hs.put("nombre",res.getString("nombre"));
+//              hs.put("nivel",res.getString("nivel"));
+//              hs.put("posX",res.getString("posX"));
+//              hs.put("posY",res.getString("posY"));
+//              hs.put("vit",res.getString("vit"));
+//              hs.put("des",res.getString("des"));
+//              hs.put("sab",res.getString("sab"));
+//              hs.put("fue",res.getString("fue"));
+//              hs.put("ptosHab",res.getString("ptosHab"));
+//              hs.put("ptosEst",res.getString("ptosEst"));
+//              hs.put("limExp",res.getString("limExp"));
+//              hs.put("experiencia",res.getString("experiencia"));
+//              hs.put("peso",res.getString("peso"));
+//              hs.put("fechaCreacion",res.getString("fechaCreacion"));
+//              hs.put("ban",res.getString("ban"));
+//              hs.put("cuenta",res.getString("cuenta"));
+//            }
+//        }
+//        catch(SQLException ex) {
+//        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+//        }
+//        return hs;
 
-              hs.put("id",res.getString("id"));
-              System.out.println("ID guardada en el hashmap");
-              hs.put("nombre",res.getString("nombre"));
-              hs.put("nivel",res.getString("nivel"));
-              hs.put("posX",res.getString("posX"));
-              hs.put("posY",res.getString("posY"));
-              hs.put("vit",res.getString("vit"));
-              hs.put("des",res.getString("des"));
-              hs.put("sab",res.getString("sab"));
-              hs.put("fue",res.getString("fue"));
-              hs.put("ptosHab",res.getString("ptosHab"));
-              hs.put("ptosEst",res.getString("ptosEst"));
-              hs.put("limExp",res.getString("limExp"));
-              hs.put("experiencia",res.getString("experiencia"));
-              hs.put("peso",res.getString("peso"));
-              hs.put("fechaCreacion",res.getString("fechaCreacion"));
-              hs.put("ban",res.getString("ban"));
-              hs.put("cuenta",res.getString("cuenta"));
-            }
-        }
-        catch(SQLException ex) {
-        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
-        }
-        return hs;
-
-    }
+//    }
     public void actualizaPersonaje(Jugador pj){
 
     }
 
-    public short[] obtienePosPersonaje(short id){
-        short pos[]=null;
-        String StrSql = "SELECT pjuno.idPersonaje id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.esBaneado ban, pjdos.idCuenta cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.idPersonaje="+id+" and pjdos.idPersonaje="+id;
-        try{
-            Statement st = conn.createStatement();
-            ResultSet res = st.executeQuery(StrSql);
-            if(res.next()) {
-              pos[0] = res.getShort("posicionX");
-              pos[1] = res.getShort("posicionY");
-            }
-        }
-        catch(SQLException ex) {
-        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
-        }
-        return pos;
-
-    }
+//    public short[] obtienePosPersonaje(short id){
+//        short pos[]=null;
+//        String StrSql = "SELECT pjuno.id id, pjuno.nombre nombre, pjuno.nivel nivel, pjuno.posicionX posX, pjuno.posicionY posY, pjdos.vitalidad vit, pjdos.destreza des, pjdos.sabiduria sab, pjdos.fuerza fue, pjdos.totalPuntosHabilidad ptosHab, pjdos.totalPuntosEstadistica ptosEst, pjdos.limiteSuperiorExperiencia limExp, pjdos.experiencia experiencia, pjdos.pesoSoportado peso, pjdos.fechaCreacion, pjdos.estaBaneado ban, pjdos.Cuenta_id cuenta FROM personaje pjuno, jugador pjdos WHERE pjuno.id="+id+" and pjdos.Personaje_id="+id;
+//        try{
+//            Statement st = conn.createStatement();
+//            ResultSet res = st.executeQuery(StrSql);
+//            if(res.next()) {
+//              pos[0] = res.getShort("posicionX");
+//              pos[1] = res.getShort("posicionY");
+//            }
+//        }
+//        catch(SQLException ex) {
+//        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+//        }
+//        return pos;
+//
+//    }
 
     public HashMap datosConstruyePersonaje(short id){
         HashMap dataIni=new HashMap();
-        String StrSql = "SELECT nombre, nivel, posicionX posX, posicionY posY, tipo FROM personaje WHERE idPersonaje="+id;
+        String StrSql = "SELECT nombre, nivel, posicionX posX, posicionY posY, tipo FROM personaje WHERE id="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
@@ -132,12 +132,12 @@ public class dbDelegate {
 
     public HashMap datosMision(short id){
         HashMap dataIni=new HashMap();
-        String StrSql = "SELECT * FROM mision WHERE idPersonajeConcluyeMision="+id;
+        String StrSql = "SELECT * FROM mision WHERE personaje_id="+id;
         try{
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery(StrSql);
             if (res.next()) {
-              dataIni.put("idMision",res.getShort("idMision"));
+              dataIni.put("idMision",res.getShort("id"));
               //System.out.println("nombre: "+res.getString("nombre"));
               dataIni.put("nomMision",res.getString("nombre"));
               //System.out.println("nivel: "+res.getShort("nivel"));
@@ -158,7 +158,7 @@ public class dbDelegate {
         System.out.println("ID :"+id);
         System.out.println("X :"+posicionX);
         System.out.println("Y :"+posicionY);
-        String StrSql = "UPDATE personaje SET posicionX=" + posicionX + ", posicionY=" + posicionY + " WHERE idPersonaje="+id;
+        String StrSql = "UPDATE personaje SET posicionX=" + posicionX + ", posicionY=" + posicionY + " WHERE id="+id;
         try{
             Statement st = conn.createStatement();
             int actualizadas = st.executeUpdate(StrSql);
@@ -186,21 +186,21 @@ public class dbDelegate {
         }  
     }
 
-    public ResultSet obtieneInvetario(short id){
-        String StrSql = "SELECT inv.idPersonaje idPersonaje, inv.idObjeto idObjeto, inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  FROM inventario inv, objeto obj WHERE inv.idPersonaje="+id+" AND inv.idObjeto=obj.idObjeto";
-        ResultSet inventario = null;
-        try{
-            Statement st = conn.createStatement();
-            inventario = st.executeQuery(StrSql);
-         
-        }
-        catch(SQLException ex) {
-        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
-        }
-        return inventario;
-    }
+//    public ResultSet obtieneInvetario(short id){
+//        String StrSql = "SELECT inv.Personaje_id idPersonaje, inv.Objeto_id idObjeto, inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado  FROM inventario inv, objeto obj WHERE inv.Personaje_id="+id+" AND inv.Objeto_id=obj.id";
+//        ResultSet inventario = null;
+//        try{
+//            Statement st = conn.createStatement();
+//            inventario = st.executeQuery(StrSql);
+//
+//        }
+//        catch(SQLException ex) {
+//        System.out.println("Hubo un problema al intentar conectarse con la base de datos "+ex);
+//        }
+//        return inventario;
+//    }
     public ResultSet obtieneTamanoInvetario(short id){
-        String StrSql = "SELECT count(idPersonaje) filas FROM inventario WHERE idPersonaje="+id+" group by idPersonaje";
+        String StrSql = "SELECT count(Personaje_id) filas FROM inventario WHERE Personaje_id="+id+" group by Personaje_id";
         ResultSet inventario = null;
         try{
             Statement st = conn.createStatement();
@@ -214,7 +214,7 @@ public class dbDelegate {
     }
 
     public ResultSet comparaInvetario(short idJugador, short idNpc){
-        String StrSql = "SELECT invuno.cantidad  FROM inventario invuno, inventario invdos  WHERE invuno.idPersonaje="+idJugador+" AND invdos.idPersonaje="+idNpc+" AND invuno.idObjeto=invdos.idObjeto AND invuno.cantidad>invdos.cantidad-1";
+        String StrSql = "SELECT invuno.cantidad  FROM inventario invuno, inventario invdos  WHERE invuno.Personaje_id="+idJugador+" AND invdos.Personaje_id="+idNpc+" AND invuno.Objeto_id=invdos.Objeto_id AND invuno.cantidad>invdos.cantidad-1";
         ResultSet inventario = null;
         try{
             Statement st = conn.createStatement();
@@ -228,10 +228,10 @@ public class dbDelegate {
     }
 
     public void agregarItem(short idJugador, short idItem,short cantidad) throws SQLException{
-        ResultSet rs = Consulta("SELECT * FROM inventario WHERE idPersonaje="+idJugador+" AND idObjeto="+idItem);
+        ResultSet rs = Consulta("SELECT * FROM inventario WHERE Personaje_id="+idJugador+" AND Objeto_id="+idItem);
         if(rs.next()){
             short vCantiadad = (short)(rs.getShort("cantidad")+cantidad);
-            int insertInventarioPj = Ejecutar("Update inventario set cantidad="+vCantiadad+" WHERE idPersonaje="+idJugador+" AND idObjeto="+idItem);
+            int insertInventarioPj = Ejecutar("Update inventario set cantidad="+vCantiadad+" WHERE Personaje_id="+idJugador+" AND Objeto_id="+idItem);
         }else{
             int insertInventarioPj = Ejecutar("INSERT INTO inventario VALUES ("+idJugador+","+idItem+","+cantidad+",0)");
         }
