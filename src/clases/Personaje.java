@@ -9,7 +9,9 @@ import java.sql.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.text.StyledEditorKit.BoldAction;
 import jgame.JGRectangle;
+import jgame.JGTimer;
 
 /**
  *
@@ -49,6 +51,7 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     private Inventario inventario;
     private ContrincanteHabilidad habilidades;
     private Encargo misiones;
+    private Boolean bloqueo;
 
     public Personaje(double x, double y, double speed, short idPersonaje, String nombre, short nivel, short tipo) {
         super("player", x, y, 1, "human_", true, false,
@@ -61,6 +64,7 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
         this.inventario = new Inventario();
         this.habilidades = new ContrincanteHabilidad();
         this.misiones = new Encargo();
+        this.bloqueo = false;
     }
 
     public Personaje() {
@@ -69,6 +73,8 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
         this.inventario = new Inventario();
         this.habilidades = new ContrincanteHabilidad();
         this.misiones = new Encargo();
+        this.bloqueo = false;
+       
     }
 
     public ContrincanteHabilidad getHabilidades() {
@@ -141,23 +147,19 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
      * -Habilidades que posee
      */
 
-    public void cargarDatos(Short id){
-        try{
+    public void cargarDatos(Short id) {
         this.cargarPersonaje(id);
         this.getInventario().cargarInventario(id);
+        System.out.println("Problemas en: clase->personaje , método->cargarDatos() -> despue sde inventario");
         this.getMisiones().cargarMisiones(id);
         this.getHabilidades().cargarHabilidades(id);
-        //this.cargarHabilidades(id);
-        //this.cargarInventario(id);
-        //this.cargarMisiones(id);
-        }
-        catch(Exception e){
-            System.out.println("Problemas en: clase->personaje , método->cargarDatos() " + e);
-        }
+
+
     }
     /*
      * Carga los datos del personaje desde la base de datos
      */
+
     public void cargarPersonaje(Short id) {
         this.conexion = new dbDelegate();
         System.out.println("Inicio obtiene datos personaje");
@@ -170,7 +172,7 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
                 + " pjdos.Cuenta_id cuenta FROM personaje pjuno, jugador pjdos "
                 + "WHERE pjuno.id=" + id
                 + "  AND pjdos.Personaje_id=" + id;
-        
+
         try {
 
             ResultSet res = conexion.Consulta(StrSql);
@@ -181,7 +183,7 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
                 this.setNivel(res.getShort("nivel"));
                 this.setPos(res.getInt("posx"), res.getInt("posy"));
                 this.setTipo(res.getShort("tipo"));
-                
+
             }
         } catch (SQLException ex) {
             System.out.println("Problemas en: clase->personaje , método->cargarPersonaje() " + ex);
@@ -193,90 +195,43 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
         }
 
     }
-    /*
-     * Carga los objetos desde la base de datos asociados al personaje
-     * las deja en el arreglo "objetos"
-     */
 
-//    public void cargarInventario(String id) {
-//        this.conexion = new dbDelegate();
-//        System.out.println("Inicio obtiene datos personaje");
-//        String StrSql = "SELECT   inv.Personaje_id idPersonaje, inv.Objeto_id idObjeto,"
-//                + " inv.cantidad cantidad, obj.nombre nombre, inv.estaEquipado estaEquipado "
-//                + "  FROM inventario inv, objeto obj "
-//                + " WHERE inv.Personaje_id=" + id
-//                + "   AND inv.Objeto_id=obj.id";
-//        try {
-//            ResultSet res = conexion.Consulta(StrSql);
-//            byte i = 0;
-//            while (res.next()) {
-//                this.objetos[i] = new Inventario();
-//                this.objetos[i].setIdObjeto(res.getShort("idObjeto"));
-//                this.objetos[i].setIdPersonaje(res.getShort("idPersonaje"));
-//                this.objetos[i].setCantidad(res.getShort("cantidad"));
-//                this.objetos[i].setEstaEquipado(res.getShort("estaequipado"));
-//                i += 1;
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Problemas en: clase->personaje , método->cargarInventario() " + ex);
-//        }
-//
-//    }
-     /*
-     * Carga las habilidades desde la base de datos asociadas al personaje
-     * las deja en el arreglo "habilidades"
-     */
-//    public void cargarHabilidades(String id) {
-//        this.conexion = new dbDelegate();
-//        System.out.println("Inicio obtiene datos personaje");
-//        String StrSql = "SELECT * FROM contrincante_habilidad"
-//                + "WHERE personaje_id = "+id;
-//        try {
-//            ResultSet res = conexion.Consulta(StrSql);
-//            byte i = 0;
-//            while (res.next()) {
-//                this.habilidades[i].setIdHabilidad(res.getShort("habilidad_id"));
-//                this.habilidades[i].setIdPersonaje(res.getShort("personaje_id"));
-//                this.habilidades[i].setNivelHabilidad(res.getShort("nivelhabilidad"));
-//                i += 1;
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Problemas en: clase->personaje , método->cargarHabilidades() " + ex);
-//        }
-//
-//    }
-
-     /*
-     * Carga las misiones desde la base de datos asociados al personaje
-     * las deja en el arreglo "objetos"
-     */
-//    public void cargarMisiones(String id) {
-//        this.conexion = new dbDelegate();
-//        System.out.println("Inicio obtiene datos personaje");
-//        String StrSql = "SELECT * FROM encargo"
-//                + "WHERE personaje_id = "+id+
-//                "AND updated_at IS NULL";
-//        try {
-//            ResultSet res = conexion.Consulta(StrSql);
-//            byte i = 0;
-//            while (res.next()) {
-//                this.misiones[i].setIdMision(res.getShort("mision_id"));
-//                this.misiones[i].setIdPersonaje(res.getShort("personaje_id"));
-//                this.misiones[i].setFechaComienzo(res.getDate("created_at"));
-//                this.misiones[i].setRolPersonaje(res.getShort("rolpersonaje"));
-//                this.misiones[i].setFechaFin(null);
-//                i += 1;
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Problemas en: clase->personaje , método->cargarMisiones() " + ex);
-//        }
-//
-//    }
-    public boolean tieneMision(){
+    public boolean tieneMision() {
         boolean resultado = false;
-        
+
         return resultado;
     }
+    /*
+     * bloquea al personaje según el tiempo indicado
+     */
+    public void bloquear(int tiempo) {
+        this.setBloqueo(true);
+        new JGTimer(tiempo, true) {
+
+            @Override
+            public void alarm() {
+                desbloquear();
+                
+            }
+        };
+    }
+
+    public void setBloqueo(Boolean bloqueo) {
+        this.bloqueo = bloqueo;
+    }
+
+    public Boolean getBloqueo() {
+        return bloqueo;
+    }
+
+    public Boolean isBlocked() {
+        return bloqueo;
+    }
+
+    private void desbloquear() {
+        this.setBloqueo(false);
+    }
+
     public double getPosicionX() {
         return this.x;
     }

@@ -7,6 +7,8 @@ package clases;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -19,9 +21,9 @@ public class Inventario {
     private HashMap<Short, Item> objetos;//contiene los objetos del personaje
 
     public Inventario() {
-        //Buscar los objetos que tiene asociado el personaje segun la ID entregada
+        this.objetos = new HashMap<Short, Item>();
     }
-    
+
     /*
      * Carga los objetos desde la base de datos asociados al personaje
      * las deja en el arreglo "objetos"
@@ -46,6 +48,7 @@ public class Inventario {
                 item.setEstaEquipado(res.getShort("estaequipado"));
                 this.objetos.put(item.getIdObjeto(), item);
                 i += 1;
+
             }
         } catch (SQLException ex) {
             System.out.println("Problemas en: clase->Inventario , método->cargarInventario() " + ex);
@@ -54,31 +57,41 @@ public class Inventario {
     }
     /*
      * agrega un item al inventario, si el item está, se suma la cantidad
-     * FALTA VALIDAR QUE NO SUPERE EL PESO
+     * 
      */
-    public void agregarItem(short idItem, short cantidad){
-        Item item = new Item();
-        item.setCantidad(cantidad);
-        item.setEstaEquipado((short)0);//se asume que item nuevo no se equipa
-        item.setIdObjeto(idItem);
-        item.setIdPersonaje(this.idPersonaje);
-        if (this.tieneItem(idItem)){
+
+    public void agregarItem(short idItem, short cantidad) {
+        Item item = creaItem(idItem, cantidad, (short) 0);
+        if (this.tieneItem(idItem)) {
             this.getObjetos().get(idItem).sumarCantidad(cantidad);
-        }else this.getObjetos().put(idItem, item);
+        } else {
+            this.getObjetos().put(idItem, item);
+        }
+    }
+
+    public void agregarItem(short idItem) {
+        Item item = creaItem(idItem, (short) 1, (short) 0);
+        if (this.tieneItem(idItem)) {
+            this.getObjetos().get(idItem).sumarCantidad((short) 1);
+        } else {
+            this.getObjetos().put(idItem, item);
+        }
     }
     /*
      * Borra item según la cantidad indicada
      */
-    public void borrarItem(short idItem, short cantidad){
-        if (this.getObjetos().containsKey(idItem)){
+
+    public void eliminarItem(short idItem, short cantidad) {
+        if (tieneItem(idItem, cantidad)) {
             this.getObjetos().get(idItem).restarCantidad(cantidad);
         }
     }
     /*
      * Borra item sin importar la cantidad
      */
-    public void borrarItem(short idItem){
-        if (this.getObjetos().containsKey(idItem)){
+
+    public void eliminarItem(short idItem) {
+        if (tieneItem(idItem)) {
             this.getObjetos().remove(idItem);
         }
     }
@@ -86,19 +99,96 @@ public class Inventario {
     /*
      * Verifica si tiene el objeto en cuestión
      */
-    public boolean tieneItem(short  idObjeto){
+    public boolean tieneItem(short idObjeto) {
         return this.getObjetos().containsKey(idObjeto);
     }
-    
-//    public boolean comparaItem(short idJugador, short idNpc) throws SQLException {
-//        boolean tiene = false;
-//        ResultSet rs = conexion.comparaInvetario(idJugador, idNpc);
-//        if (rs.next()) {
-//            tiene = true;
-//        }
-//        System.out.println("Tiene: " + tiene);
-//        return tiene;
+
+    /*
+     * Verifica si tiene la cantidad requerida del objeto en cuestión
+     */
+    public boolean tieneItem(short idObjeto, short cantidad) {
+        return this.getObjetos().containsKey(idObjeto)
+                && this.getObjetos().get(idObjeto).getCantidad() == cantidad;
+
+    }
+
+    /*
+     * retorna el el peso total usado por el inventario(suma de los objetos)
+     */
+    public int getPesoUsado() {
+        //objeto la lista de objetos
+        int pesoTotal = 0;
+        Iterator it = this.getObjetos().entrySet().iterator();
+        Objeto obj = new Objeto();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            obj.setObjeto(Short.parseShort(e.getKey().toString()));
+            pesoTotal += obj.getPeso();
+        }
+        return pesoTotal;
+    }
+
+    /*
+     * retorna el valor en dinero que suman los elementos
+     */
+    public int getDineroTotal() {
+        //objeto la lista de objetos
+        int dineroTotal = 0;
+        Iterator it = this.getObjetos().entrySet().iterator();
+        Objeto obj = new Objeto();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            obj.setObjeto(Short.parseShort(e.getKey().toString()));
+            dineroTotal += obj.getValorDinero();
+        }
+        return dineroTotal;
+    }
+
+    /*
+     * Crea un item privado para centralizar la creacion y favorecer la modularidad
+     */
+    private Item creaItem(short idObjeto, short cantidad, short estaequipado) {
+        return new Item(this.getIdPersonaje(), idObjeto, cantidad, estaequipado);
+    }
+
+//    /*DEBEN IR EN PERSONAJE
+//     * Equipa un item
+//     */
+//    public void equiparItem(short idItem){
+//        this.getObjetos().get(idItem).setEstaEquipado((short)1);
 //    }
+//
+//    /*
+//     * Desequipa un item
+//     */
+//    public void desequiparItem(short idItem){
+//        this.getObjetos().get(idItem).setEstaEquipado((short)0);
+//    }
+
+    /*
+     * Devuelve la cantidad de objetos de un determinado tipo
+     */
+    public int contarItem(short idItem){
+        int cuenta = 0;
+        if (tieneItem(idItem)){
+            cuenta = this.getObjetos().get(idItem).getCantidad();
+        }
+        return cuenta;
+    }
+    /*
+     * devuele la cantidad en total de todos los objetos
+     */
+
+    public int contarTodosItems() {
+        //objeto la lista de objetos
+        int cuenta = 0;
+        Iterator it = this.getObjetos().entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            cuenta += this.getObjetos().get(Short.parseShort(e.getKey().toString())).getCantidad();
+        }
+        return cuenta;
+    }
 
     public short getIdPersonaje() {
         return idPersonaje;
@@ -118,6 +208,16 @@ public class Inventario {
         private short idObjeto;
         private short cantidad;
         private short estaEquipado;
+
+        public Item() {
+        }
+
+        public Item(short idPersonaje, short idObjeto, short cantidad, short estaEquipado) {
+            this.idPersonaje = idPersonaje;
+            this.idObjeto = idObjeto;
+            this.cantidad = cantidad;
+            this.estaEquipado = estaEquipado;
+        }
 
         public short getCantidad() {
             return cantidad;
@@ -151,20 +251,20 @@ public class Inventario {
             this.idPersonaje = idPersonaje;
         }
 
-        public void sumarCantidad(short cantidad){
+        public void sumarCantidad(short cantidad) {
             this.setCantidad((short) (this.getCantidad() + cantidad));
         }
         /*
          * borra la cantidad indicada, si es menor que cero lo deja en cero
          *
          */
-        public void restarCantidad(short cantidad){
+
+        public void restarCantidad(short cantidad) {
             short valor = (short) (this.getCantidad() - cantidad);
-            if(this.getCantidad() - cantidad < 0){
+            if (this.getCantidad() - cantidad < 0) {
                 valor = 0;
             }
             this.setCantidad(valor);
         }
-
-   }
+    }
 }
