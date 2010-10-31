@@ -7,6 +7,7 @@ import jgame.JGFont;
 import jgame.JGPoint;
 import jgame.platform.*;
 import java.util.HashMap;
+import jgame.JGTimer;
 
 /**
  *
@@ -57,7 +58,7 @@ public class Manager extends JGEngine {
     private menuJuego menu;
     //Valor para determinar si la aplicacion debe cerrarse
     private boolean salir = false;
-
+ private int seg = 0;   
     public static void main(String[] args) {
         new Manager(new JGPoint(800, 540));
 
@@ -92,15 +93,28 @@ public class Manager extends JGEngine {
         } catch (Exception ex) {
             System.out.println("Error al cargar medios: " + ex);
         }
+        new JGTimer(
+                60, // number of frames to tick until alarm
+                false // true means one-shot, false means run again
+                // after triggering alarm
+                ) {
+            // the alarm method is called when the timer ticks to zero
+
+            @Override
+            public void alarm() {
+                seg++;
+            }
+        };
         //setMsgFont(new JGFont("Helvetica",0,32));
         setFont(new JGFont("Arial", 0, 20));
         setPFSize(80, 60);//ventana de juego
-
         //Obtiene los datos del jugador guardados en la DB
+        //cargaJugador(0,0); reemplazamos por el metodo nuevo
+        this.pj = new Jugador();
+        this.pj.cargarDatos(this.idJugador);
+
         try {
-            //cargaJugador(0,0); reemplazamos por el metodo nuevo
-            this.pj = new Jugador();
-            this.pj.cargarDatos(this.idJugador);
+
 
             menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
 
@@ -130,7 +144,7 @@ public class Manager extends JGEngine {
             pileta = new Npc(128, 64, "arbol2", "pileta", 4, 0, (short) 108, new String[]{"Hola amiguirijillo", "soy la fuente magica"});//
 
         } catch (Exception ex) {
-            System.out.println("Extrae datos del HashMap: " + ex);
+            System.out.println("Extrae datos del HashMapsssssssssssssssss: " + ex);
         }
         /*
          * Mapa completo de tiles que definen el campo de juego.
@@ -217,7 +231,7 @@ public class Manager extends JGEngine {
             System.out.println(pj.npcInterac.getNomNpc() + "Npc");
             try {
                 casa1 = new Npc(viewXOfs() + 380, viewYOfs() + 120, pj.npcInterac.getNomNpc() + "Npc", pj.npcInterac.getNomNpc() + "Npc", 51, 51, (short) (pj.npcInterac.getIdNpc()), pj.npcInterac.obtieneDialogo());
-               // casa1.realizaTarea(pj);
+                // casa1.realizaTarea(pj);
             } catch (Exception ex) {
                 System.out.println("Extrae datos del HashMap: fsdfsdfsd" + ex);
             }
@@ -272,17 +286,22 @@ public class Manager extends JGEngine {
             System.exit(0);
         }
     }
+   
 
     @Override
     public void paintFrame() {
+
         //panel basico
         menu.menuActual(getTeclaMenu());
-
+        
+        drawString("SEGUNDOS: " + seg, viewXOfs() + 200 / 2, viewHeight() / 2, 1);
         drawRect(viewXOfs() + 700, viewYOfs(), 100, viewHeight(), true, false);
-
+        if (!pj.isBlocked()){
+            System.out.println("TOOOOOOOOOOOOOOOOOL");
+        }else System.out.println("EMPEROOOOOOOOOOOR");
         if (getKey(KeyEsc)) {
             menu.ventanaSalida();
-
+            pj.bloquear(60);
             if (getKey(KeyEnter)) {
                 menu.setTeclaEscape(false);
                 setSalir(true);
@@ -377,6 +396,7 @@ public class Manager extends JGEngine {
 
         }
         tiempoMensaje--;
+
     }
 
     /*

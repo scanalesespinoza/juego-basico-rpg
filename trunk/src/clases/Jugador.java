@@ -1,31 +1,21 @@
 package clases;
 
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import jgame.*;
-
 
 /**
  *
  * @author gerald
  */
 public class Jugador extends Personaje {
-    private Inventario[] inv;
-    public Encargo encargos;
+
     private short idJugador;
+
     public Jugador(double x, double y, double speed, short idPj, String nombrePj, short nivelPj, short tipoPj) throws SQLException {
         super(x, y, speed, idPj, nombrePj, nivelPj, tipoPj);
-        this.idJugador=idPj;
-        //Instancia un ventario del jugador
-        //cargaInventario(idPj);
-        //Instancia encargo del jugador
-       // encargos = new Encargo(idPj);
-        //Instancia habilidades del jugador
+        this.idJugador = idPj;
     }
-    
-
     private short vitalidad;
     private short destreza;
     private short sabiduria;
@@ -40,79 +30,70 @@ public class Jugador extends Personaje {
     //Determina si un npc esta activo (se ha colisionado con el desencadenando un dialogo con el jugador)
     private boolean interactuarNpc = false;
     private dbDelegate conect = new dbDelegate();
-
     public Npc npcInterac;
 
     public Jugador() {
-        //throw new UnsupportedOperationException("Not yet implemented");
     }
-
-
-    /*
-     * Carga datos del personaje
+    /* Aumenta la todas las  cosas inherentes al subir de nivel
+     * 
      */
-//    public void cargaDatosPj(){
-//        System.out.println("cargaDatosPj"+getIdPersonaje());
-//        HashMap datosPj = new HashMap();
-//        //Carga datos del jugador desde la base de datos
-//        try{
-//            datosPj=conect.obtieneDatosPersonaje(getIdPersonaje());
-//        }
-//        catch(Exception ex){
-//            System.out.println("Error al conectar la DB #Jugador carga datos jugador: "+ex);
-//        }
-//
-//        this.setIdPersonaje((Short.valueOf(datosPj.get("id").toString())));
-//        this.setVitalidad((Short.valueOf(datosPj.get("vit").toString())));
-//        this.setDestreza((Short.valueOf(datosPj.get("des").toString())));
-//        this.setSabiduria((Short.valueOf(datosPj.get("sab").toString())));
-//        this.setFuerza((Short.valueOf(datosPj.get("fue").toString())));
-//        this.setTotalPuntosHabilidad((Short.valueOf(datosPj.get("ptosHab").toString())));
-//        this.setTotalPuntosEstadistica((Short.valueOf(datosPj.get("ptosEst").toString())));
-//        this.setLimiteSuperiorExperiencia(Integer.parseInt(datosPj.get("limExp").toString()));
-//        this.setExperiencia(Integer.parseInt(datosPj.get("experiencia").toString()));
-//        this.setPesoSoportado(Integer.parseInt(datosPj.get("peso").toString()));
-//
-//    }
 
-  /*
-   * Salva los datos del Jugador a la base de datos
-   */
-    public void salvaPj(Jugador This){
-        
+    public void subirNivel() {
+        this.aumentarNivel();
+        this.aumentarStats();
+        this.setExperiencia(0);
+        this.setLimiteSuperiorExperiencia((int) this.calcularLimiteExperiencia());
+    }
+    /*
+     * aumente el nivel en una unidad
+     */
+
+    public void aumentarNivel() {
+        this.setNivel((short) (this.getNivel() + 1));
     }
 
-    /*public void cargaInventario(short idPj) throws SQLException{
+    private double calcularLimiteExperiencia() {
+        int limite = this.getLimiteSuperiorExperiencia();
+        //hay que fijar en el trabajo (domcumento word) la formula que emplearemos.
+        //aca usare que aumente el 37%
 
-        ResultSet rTamanoInventario=conect.obtieneTamanoInvetario(idPj);
-        ResultSet rInventario=conect.obtieneInvetario(idPj);
-        System.out.println("CargaIventario");
-        if(rTamanoInventario.next()){
-            inv = new Inventario[rTamanoInventario.getInt("filas")];
-            //System.out.println("rInventario.getInt('filas')"+rInventario.getInt("filas"));
-            //System.out.println("Largo Inv: "+inv.length);
-        }
-        int i=0;
-        while(rInventario.next()){
-            inv[i] = new Inventario();
-            System.out.println("Indice: "+i);
-            System.out.println("rInventario.getShort('idPersonaje')"+rInventario.getShort("idPersonaje"));
-            inv[i].setIdPersonaje(rInventario.getShort("idPersonaje"));
-            System.out.println("inv["+i+"].isPersonaje: "+inv[i].getIdPersonaje());
+        return limite * 1.35;
+    }
+    /*aumenta los stats
+     * del jugador
+     */
 
-            System.out.println("rInventario.getShort('idObjeto')"+rInventario.getShort("idObjeto"));
-            inv[i].setIdObjeto(rInventario.getShort("idObjeto"));
-            System.out.println("rInventario.getShort('cantidad')"+rInventario.getShort("cantidad"));
-            inv[i].setCantidad(rInventario.getShort("cantidad"));
-            System.out.println("rInventario.getShort('estaEquipado')"+rInventario.getShort("estaEquipado"));
-            inv[i].setEstaEquipado(rInventario.getShort("estaEquipado"));
-            System.out.println("rInventario.getString('nombre')"+rInventario.getString("nombre"));
-            inv[i].setNombre(rInventario.getString("nombre"));
-            i+=1;
-        }
+    private void aumentarStats() {
+        short aumento = 3;
+        this.setVitalidad((short) (this.getVitalidad() + aumento));
+        this.setDestreza((short) (this.getDestreza() + aumento));
+        this.setFuerza((short) (this.getFuerza() + aumento));
+        this.setSabiduria((short) (this.getSabiduria() + aumento));
+        this.aumentarPuntos();
+        this.aumentarPesoSoportado();
+    }
 
-    }*/
+    public void aumentarExperiencia(short exp) {
+        this.setExperiencia(this.getExperiencia() + exp);
+    }
 
+    private void aumentarPuntos() {
+        this.aumentaPuntosEstadistica();
+        this.aumentaPuntosHabilidad();
+    }
+
+    private void aumentaPuntosHabilidad() {
+        this.setTotalPuntosHabilidad((short) (this.getTotalPuntosHabilidad() + 1));
+    }
+
+    private void aumentaPuntosEstadistica() {
+        this.setTotalPuntosEstadistica((short) (this.getTotalPuntosEstadistica() + 1));
+    }
+
+    private void aumentarPesoSoportado() {
+        //hay que determinar en cuando sube el peso soportado
+        this.setPesoSoportado(this.getPesoSoportado() + 50);
+    }
 
     @Override
     public void move() {
@@ -121,14 +102,14 @@ public class Jugador extends Personaje {
         setbLeftkey(false);
         setbRightkey(false);
         setbUpkey(false);
-        
+
         int entorno = 16; //variable para formar cuadrados a partir de un punto.
         if (eng.getMouseButton(1)) {
             //Obtengo posicion del mouse
             mouseX = eng.getMouseX() + eng.viewXOfs();
             mouseY = eng.getMouseY() + eng.viewYOfs();
 
-            if(interactuarNpc){
+            if (interactuarNpc) {
                 return;
             }
 
@@ -154,7 +135,7 @@ public class Jugador extends Personaje {
             if (this.y > mouseY + entorno) {
                 setbUpkey(true);
             }
-            
+
             if (rClick.intersects(this.getTileBBox()) || eng.getMouseButton(3) || eng.getKey(eng.KeyLeft)
                     || eng.getKey(eng.KeyDown) || eng.getKey(eng.KeyUp) || eng.getKey(eng.KeyRight)) {
                 setbDownkey(false);
@@ -188,21 +169,19 @@ public class Jugador extends Personaje {
         super.desplazar();
     }
 
-
     @Override
-    public void hit(JGObject obj){
-        try{
-            conect.actualizaPosicionJugador(this.getIdPersonaje(),(int)this.getLastX(),(int)this.getLastY()+5);
+    public void hit(JGObject obj) {
+        try {
+            conect.actualizaPosicionJugador(this.getIdPersonaje(), (int) this.getLastX(), (int) this.getLastY() + 5);
+        } catch (Exception ex) {
+            System.out.println("Error al conectar la DB #Jugador.Hit: " + ex);
         }
-        catch(Exception ex){
-            System.out.println("Error al conectar la DB #Jugador.Hit: "+ex);
-        }
-        
+
         remove();
         this.setInteractuarNpc(true);
-        System.out.println("Nombre del objeto colisionador"+getGraphic()+getName());
+        System.out.println("Nombre del objeto colisionador" + getGraphic() + getName());
 
-        this.npcInterac=(Npc)obj;
+        this.npcInterac = (Npc) obj;
     }
 
     public short getDestreza() {
@@ -301,14 +280,6 @@ public class Jugador extends Personaje {
         this.interactuarNpc = interactuarNpc;
     }
 
-    public Inventario[] getInv() {
-        return inv;
-    }
-
-    public void setInv(Inventario[] inv) {
-        this.inv = inv;
-    }
-
     public short getIdJugador() {
         return idJugador;
     }
@@ -317,5 +288,30 @@ public class Jugador extends Personaje {
         this.idJugador = idJugador;
     }
 
+    public int getPesoDisponible() {
+        return this.getPesoSoportado() - this.getInventario().getPesoUsado();
+    }
+
+    public void agregarItem(short idItem, short cantidad) {
+        Objeto objt = new Objeto();
+        objt.setObjeto(idItem);
+        if (puedellevarItem(idItem, cantidad)) {
+            this.getInventario().agregarItem(idItem, cantidad);
+        }
+    }
+
+    public void agregarItem(short idItem) {
+        Objeto objt = new Objeto();
+        objt.setObjeto(idItem);
+        if (puedellevarItem(idItem, (short)1)) {
+            this.getInventario().agregarItem(idItem, (short)1);
+        }
+    }
+
+    private boolean puedellevarItem(short idItem, short cantidad ){
+        Objeto objt = new Objeto();
+        objt.setObjeto(idItem);
+        return cantidad > 0 && objt != null && objt.getPeso() * cantidad <= this.getPesoDisponible();
+    }
 
 }
