@@ -17,6 +17,8 @@ piedra_os	^	16	/media/imagenes/tiles/Rock_Gray_1.png	-
 pasto	%	0	/media/imagenes/tiles/pasto_oscuro.png	-
 //define tile bloquedo
 cuadro	!	20	/media/imagenes/tiles/vacio.png	-
+//define mob
+mario	-	50	/media/imagenes/mobs/mario.gif	-
 
 
 //gif-map de 11 cuadros que simulan el desplazar frontal del personaje

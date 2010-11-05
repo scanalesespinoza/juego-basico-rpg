@@ -43,6 +43,8 @@ public class Npc extends StdDungeonMonster  {
          
     }
 
+
+
     public String[] obtieneDialogo(){
         /*
         String[] dialogo = {"Hola amigo",
@@ -61,6 +63,18 @@ public class Npc extends StdDungeonMonster  {
          */
 
         return dialogo;
+    }
+
+    public void comerciar(){
+
+    }
+
+    public void misionar(){
+
+    }
+
+    public void dialogar(){
+
     }
 
     /*public void realizaTarea(Jugador pj) throws SQLException{

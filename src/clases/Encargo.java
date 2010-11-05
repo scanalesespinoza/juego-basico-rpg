@@ -79,6 +79,14 @@ public class Encargo {
         }
     }
 
+    public void abandonaMision(short idMision){
+        this.conexion = new dbDelegate();
+        System.out.println("Inicio aumentaHabilidad");
+        String StrSql = "DELETE FROM contrincante_habilidad "
+                + "WHERE habilidad_id = " + idMision;
+        conexion.Ejecutar(StrSql);
+    }
+
     /*
      * Verifica si el personaje tiene una mision
      */

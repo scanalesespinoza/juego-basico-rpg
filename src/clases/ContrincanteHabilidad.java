@@ -48,10 +48,53 @@ public class ContrincanteHabilidad {
                 i += 1;
             }
         } catch (SQLException ex) {
-            System.out.println("Problemas en: clase->personaje , método->cargarHabilidades() " + ex);
+            System.out.println("Problemas en: clase->ContrincanteHabilidad , método->cargarHabilidades() " + ex);
         }
 
     }
+
+    /*
+     * Aumenta el nivel de la habilidad del personaje
+     */
+
+    public void aumentaNivelHabilidad(short idHabilidad){
+        this.conexion = new dbDelegate();
+        System.out.println("Inicio aumentaHabilidad");
+        String StrSql = "Update contrincante_habilidad "
+                + "SET nivelHabilidad = nivelHabilidad+1 "
+                + "WHERE personaje_id = " + idPersonaje + "AND"
+                + "habilidad_id = " + idHabilidad;
+        conexion.Ejecutar(StrSql);
+    }
+
+    /*
+     * Agrega nuevas habilidades al personaje segun el nivel adquirido
+     */
+    
+    public void agregaNuevaHabilidad(short nivelPersonaje){
+        this.conexion = new dbDelegate();
+        String StrSqlUno = new String();
+        String StrSqlDos = new String();
+        if(nivelPersonaje==3){
+            StrSqlUno="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",3,1)";
+            StrSqlDos="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",4,1)";
+        }else if(nivelPersonaje==7){
+            StrSqlUno="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",5,1)";
+            StrSqlDos="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",6,1)";
+        }else if(nivelPersonaje==12){
+            StrSqlUno="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",7,1)";
+            StrSqlDos="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",8,1)";
+        }else if(nivelPersonaje==18){
+            StrSqlUno="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",9,1)";
+            StrSqlDos="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",10,1)";
+        }else if(nivelPersonaje==25){
+            StrSqlUno="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",3,1)";
+            StrSqlDos="INSERT INTO contrincante_habilidad VALUES ("+idPersonaje+",4,1)";
+        }
+        conexion.Ejecutar(StrSqlUno);
+        conexion.Ejecutar(StrSqlDos);
+    }
+
 
     private HashMap<Short, UnaHabilidad> getHabilidades() {
         return habilidades;

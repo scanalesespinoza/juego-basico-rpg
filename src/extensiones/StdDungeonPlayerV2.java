@@ -43,7 +43,7 @@ public class StdDungeonPlayerV2 extends JGObject {
 	/** Set to true to disable movement (for example, for firing). */
 	public boolean stop_moving;
 	/* state */
-	JGPoint occupied=null;
+	public JGPoint occupied=null;
 	/** When initialised, the object will snap to grid to the nearest free
 	 * position.  The object's graphic can be made
 	 * directional by setting is_directional.  This will add the suffix
