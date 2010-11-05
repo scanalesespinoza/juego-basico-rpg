@@ -12,8 +12,8 @@ public class Jugador extends Personaje {
 
     private short idJugador;
 
-    public Jugador(double x, double y, double speed, short idPj, String nombrePj, short nivelPj, short tipoPj) throws SQLException {
-        super(x, y, speed, idPj, nombrePj, nivelPj, tipoPj);
+    public Jugador(double x, double y, double speed, short idPj, String nombrePj, String graf, short nivelPj, short tipoPj) throws SQLException {
+        super(x, y, speed, idPj, nombrePj, graf, nivelPj, tipoPj);
         this.idJugador = idPj;
     }
     private short vitalidad;

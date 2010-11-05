@@ -9,7 +9,6 @@ import java.sql.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.StyledEditorKit.BoldAction;
 import jgame.JGRectangle;
 import jgame.JGTimer;
 
@@ -53,8 +52,8 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     private Encargo misiones;
     private Boolean bloqueo;
 
-    public Personaje(double x, double y, double speed, short idPersonaje, String nombre, short nivel, short tipo) {
-        super("player", x, y, 1, "human_", true, false,
+    public Personaje(double x, double y, double speed, short idPersonaje, String nombre, String graf, short nivel, short tipo) {
+        super(nombre, x, y, 1, graf, true, false,
                 16, 32, 2.3);
         stopAnim();
         this.idPersonaje = idPersonaje;

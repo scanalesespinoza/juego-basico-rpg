@@ -28,6 +28,7 @@ public class Manager extends JGEngine {
     public int pausa = 0;// Modo de evitar que se ejecuten acciones por los 60 frames que ocurren por segundo
     //Personajes del juego
     public Jugador pj;
+    public Mob mob;
     public Npc casa1;
     public Npc casa1Npc;
     public Npc alcaldia;
@@ -114,6 +115,7 @@ public class Manager extends JGEngine {
         //cargaJugador(0,0); reemplazamos por el metodo nuevo
         this.pj = new Jugador();
         this.pj.cargarDatos(this.idJugador);
+        this.mob = new Mob(100, 100, 0.3, (short)100, "Mario", "mario", (short)10, (short)2, null, true, 1);
 
         try {
 
@@ -224,9 +226,10 @@ public class Manager extends JGEngine {
     @Override
     public void doFrame() {
 
-       
+
         if (((pj.isInteractuarNpc()) && ((getMouseButton(1)) || (getKey(KeyDown)))) || (interactuar > casa1.obtieneDialogo().length)) {
-            //cargaJugador(0, 10);
+            pj=new Jugador();
+            pj.cargarPersonaje((short)1);
             removeObjects(getNomNpcInteractuar(), 51);
             pj.setInteractuarNpc(false);
             setInteractuar(0);
