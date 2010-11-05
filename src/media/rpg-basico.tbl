@@ -1,4 +1,4 @@
-//imagen loading
+﻿//imagen loading
 splash_image	a	1	/media/look/loading.png	-	0	0	505	335
 //define musica
 musicaciudad	/media/sonidos/menu/juego01.mid
@@ -176,6 +176,6 @@ casa1	casa1_0;casa1_1;casa1_2		0.3
 
 
 // "null" indica un tile vacio, se representara como un espacio trasparente
-vacio   .   0   null    -
+vacio	.	0	null	-
 //tile vacio que se usara para determinar cuadros ineccesibles, barreras, etc
-nulo   .   10   null    -
+nulo	.	10	null	-
