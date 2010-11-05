@@ -1,5 +1,7 @@
 package clases;
 
+import java.lang.String;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jgame.JGColor;
@@ -107,7 +109,7 @@ public class Manager extends JGEngine {
         };
         //setMsgFont(new JGFont("Helvetica",0,32));
         setFont(new JGFont("Arial", 0, 20));
-        setPFSize(80, 60);//ventana de juego
+        setPFSize(80, 60);//menuJuego de juego
         //Obtiene los datos del jugador guardados en la DB
         //cargaJugador(0,0); reemplazamos por el metodo nuevo
         this.pj = new Jugador();
@@ -117,8 +119,6 @@ public class Manager extends JGEngine {
 
 
             menu = new menuJuego(null, true, xofs, xofs, xofs, null, pj);
-
-
 
             casa1 = new Npc(680, 660, "casa1", "casa3", 2, 0, (short) 100,
                     new String[]{"Hola amigo",
@@ -214,14 +214,17 @@ public class Manager extends JGEngine {
                     "+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!***|",
                     "+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**|",
                     "+++++++++++++++++++++++++++++++++++|||||++++++++++++++++++++++++++++++++++++++||",});
-
+                    textoPrueba.add("hola");textoPrueba.add("como estas?");textoPrueba.add("necesito dinero");
+                    textoPrueba.add("enserio");textoPrueba.add("piola");
     }
     /** View offset. */
     int xofs = 0, yofs = 0;
+    public ArrayList<String> textoPrueba = new ArrayList<String>();
 
     @Override
     public void doFrame() {
 
+       
         if (((pj.isInteractuarNpc()) && ((getMouseButton(1)) || (getKey(KeyDown)))) || (interactuar > casa1.obtieneDialogo().length)) {
             //cargaJugador(0, 10);
             removeObjects(getNomNpcInteractuar(), 51);
@@ -296,11 +299,11 @@ public class Manager extends JGEngine {
         
         drawString("SEGUNDOS: " + seg, viewXOfs() + 200 / 2, viewHeight() / 2, 1);
         drawRect(viewXOfs() + 700, viewYOfs(), 100, viewHeight(), true, false);
-        if (!pj.isBlocked()){
-            System.out.println("TOOOOOOOOOOOOOOOOOL");
-        }else System.out.println("EMPEROOOOOOOOOOOR");
+
+        
         if (getKey(KeyEsc)) {
             menu.ventanaSalida();
+            
             pj.bloquear(60);
             if (getKey(KeyEnter)) {
                 menu.setTeclaEscape(false);
@@ -308,9 +311,10 @@ public class Manager extends JGEngine {
             }
         }
 
-        if (interactuar > 0) {
+       if (interactuar > 0) {
 
-            ventanaDialogo(pj.npcInterac.obtieneDialogo());
+           // ventanaDialogo(pj.npcInterac.obtieneDialogo());
+            new Ventana(300, 300, textoPrueba);
         }
 
 
@@ -392,44 +396,15 @@ public class Manager extends JGEngine {
             finHongos = true;
         }
         if (tiempoMensaje > 0) {
-            menu.ventanaAlert("Has encontrado Hongo x1");
+            new Ventana("wena choro pillaste una callapampa!");
+           // new Ventana(300, 300, textoPrueba);
+            
 
         }
         tiempoMensaje--;
 
     }
 
-    /*
-     * Crea el objeto Jugador.
-     * Carga los datos del personaje consultando a la base de datos.
-     * @Param varX: Solucion para no cargar el personaje sobre un npc.
-     * @Param varY: Solucion para no cargar el personaje sobre un npc.
-     */
-//    public void cargaJugador(double varX, double varY){
-//        /*
-//        System.out.println("hsDatosPersonaje.get('posX')"+hsDatosPersonaje.get("posX"));
-//        System.out.println("hsDatosPersonaje.get('posY')"+hsDatosPersonaje.get("posY"));
-//        System.out.println("idJugador"+idJugador);
-//        System.out.println("hsDatosPersonaje.get('nivel')"+hsDatosPersonaje.get("nivelPj"));
-//        System.out.println("hsDatosPersonaje.get('tipo')"+hsDatosPersonaje.get("tipo"));
-//         *
-//         */
-//        try{
-//        //System.out.println("get id jugador: "+this.getIdJugador());
-//        hsDatosPersonaje=null;
-//        System.out.println("Antes hm");
-//        hsDatosPersonaje = conect.datosConstruyePersonaje(this.getIdJugador());
-//        System.out.println("despues hm");
-//        pj = new Jugador(Double.valueOf(String.valueOf(hsDatosPersonaje.get("posX")))+varX,Double.valueOf(String.valueOf(hsDatosPersonaje.get("posY")))+varY,1,idJugador,String.valueOf(hsDatosPersonaje.get("nombrePj")),Short.valueOf(String.valueOf(hsDatosPersonaje.get("nivelPj"))),Short.valueOf(String.valueOf(hsDatosPersonaje.get("tipo"))));
-//        System.out.println("despues new pj");
-//        pj.cargaDatosPj();
-//        }
-//        catch(Exception ex){
-//            System.out.println("Consulta datos del jugador: "+ex);
-//        }
-//
-//
-//    }
     public void ventanaDialogo(String[] texto) {
         //System.out.println("Ventana dialogo: "+texto[0]);
         setColor(JGColor.blue);
