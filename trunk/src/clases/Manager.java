@@ -9,6 +9,8 @@ import jgame.JGFont;
 import jgame.JGPoint;
 import jgame.platform.*;
 import java.util.HashMap;
+import java.util.Iterator;
+import jgame.JGObject;
 import jgame.JGTimer;
 
 /**
@@ -61,7 +63,11 @@ public class Manager extends JGEngine {
     private menuJuego menu;
     //Valor para determinar si la aplicacion debe cerrarse
     private boolean salir = false;
- private int seg = 0;   
+    private int seg = 0;
+    private HashMap<Integer, Boolean> teclas;
+    private Ventana asd;
+    public String[] textoPrueba;
+
     public static void main(String[] args) {
         new Manager(new JGPoint(800, 540));
 
@@ -88,7 +94,6 @@ public class Manager extends JGEngine {
     @Override
     public void initGame() {
         setFrameRate(60, 2);
-
         try {
             defineMedia("/media/rpg-basico.tbl");
             setBGImage("bgimage");
@@ -96,16 +101,12 @@ public class Manager extends JGEngine {
         } catch (Exception ex) {
             System.out.println("Error al cargar medios: " + ex);
         }
-        new JGTimer(
-                60, // number of frames to tick until alarm
-                false // true means one-shot, false means run again
-                // after triggering alarm
-                ) {
-            // the alarm method is called when the timer ticks to zero
+        new JGTimer(60, false) {
 
             @Override
             public void alarm() {
                 seg++;
+                inicializarTeclas();
             }
         };
         //setMsgFont(new JGFont("Helvetica",0,32));
@@ -115,8 +116,8 @@ public class Manager extends JGEngine {
         //cargaJugador(0,0); reemplazamos por el metodo nuevo
         this.pj = new Jugador();
         this.pj.cargarDatos(this.idJugador);
-        this.mob = new Mob(100, 100, 0.3, (short)100, "Mario", "mario", (short)10, (short)2, null, true, 1);
-
+        this.mob = new Mob(100, 100, 0.3, (short) 100, "Mario", "mario", (short) 10, (short) 2, null, true, 1);
+        inicializarTeclas();
         try {
 
 
@@ -216,20 +217,18 @@ public class Manager extends JGEngine {
                     "+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!***|",
                     "+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**|",
                     "+++++++++++++++++++++++++++++++++++|||||++++++++++++++++++++++++++++++++++++++||",});
-                    textoPrueba.add("hola");textoPrueba.add("como estas?");textoPrueba.add("necesito dinero");
-                    textoPrueba.add("enserio");textoPrueba.add("piola");
+        textoPrueba = new String[]{"hola", "como estas?", "necesito dinero", "enserio", "piola"};
     }
     /** View offset. */
     int xofs = 0, yofs = 0;
-    public ArrayList<String> textoPrueba = new ArrayList<String>();
 
     @Override
     public void doFrame() {
-
+        this.capturarTeclas();
 
         if (((pj.isInteractuarNpc()) && ((getMouseButton(1)) || (getKey(KeyDown)))) || (interactuar > casa1.obtieneDialogo().length)) {
-            pj=new Jugador();
-            pj.cargarPersonaje((short)1);
+            pj = new Jugador();
+            pj.cargarPersonaje((short) 1);
             removeObjects(getNomNpcInteractuar(), 51);
             pj.setInteractuarNpc(false);
             setInteractuar(0);
@@ -238,6 +237,7 @@ public class Manager extends JGEngine {
             try {
                 casa1 = new Npc(viewXOfs() + 380, viewYOfs() + 120, pj.npcInterac.getNomNpc() + "Npc", pj.npcInterac.getNomNpc() + "Npc", 51, 51, (short) (pj.npcInterac.getIdNpc()), pj.npcInterac.obtieneDialogo());
                 // casa1.realizaTarea(pj);
+                asd = new Ventana(300, 300, textoPrueba);
             } catch (Exception ex) {
                 System.out.println("Extrae datos del HashMap: fsdfsdfsd" + ex);
             }
@@ -292,21 +292,20 @@ public class Manager extends JGEngine {
             System.exit(0);
         }
     }
-   
 
     @Override
     public void paintFrame() {
 
         //panel basico
         menu.menuActual(getTeclaMenu());
-        
+
         drawString("SEGUNDOS: " + seg, viewXOfs() + 200 / 2, viewHeight() / 2, 1);
         drawRect(viewXOfs() + 700, viewYOfs(), 100, viewHeight(), true, false);
 
-        
+
         if (getKey(KeyEsc)) {
             menu.ventanaSalida();
-            
+
             pj.bloquear(60);
             if (getKey(KeyEnter)) {
                 menu.setTeclaEscape(false);
@@ -314,13 +313,17 @@ public class Manager extends JGEngine {
             }
         }
 
-       if (interactuar > 0) {
-
-           // ventanaDialogo(pj.npcInterac.obtieneDialogo());
-            new Ventana(300, 300, textoPrueba);
+        if (interactuar > 0) {
+            // ventanaDialogo(pj.npcInterac.obtieneDialogo());
+            asd.avanzarTexto();
+            interactuar--;
         }
 
+        //prueba de captura de teclas
 
+        if (isPresionada(KeyCtrl)) {
+            new Ventana("presionaste crtl");
+        }
         /*
          * Detecta si has encontrado un hongo para la mision
          */
@@ -400,12 +403,66 @@ public class Manager extends JGEngine {
         }
         if (tiempoMensaje > 0) {
             new Ventana("wena choro pillaste una callapampa!");
-           // new Ventana(300, 300, textoPrueba);
-            
-
+            // new Ventana(300, 300, textoPrueba);
         }
         tiempoMensaje--;
 
+    }
+
+    public void capturarTeclas() {
+        if (getKey(KeyUp)) {
+            teclas.put(KeyUp, true);
+        }
+        if (getKey(KeyDown)) {
+            teclas.put(KeyDown, true);
+        }
+        if (getKey(KeyLeft)) {
+            teclas.put(KeyLeft, true);
+        }
+        if (getKey(KeyRight)) {
+            teclas.put(KeyRight, true);
+        }
+        if (getKey(KeyShift)) {
+            teclas.put(KeyShift, true);
+        }
+        if (getKey(KeyCtrl)) {
+            teclas.put(KeyCtrl, true);
+        }
+        if (getKey(KeyEsc)) {
+            teclas.put(KeyEsc, true);
+        }
+        if (getKey(KeyFire)) {
+            teclas.put(KeyFire, true);
+        }
+        if (getKey(KeyTab)) {
+            teclas.put(KeyTab, true);
+        }
+        if (getKey(KeyMouse1)) {
+            teclas.put(KeyMouse1, true);
+        }
+        if (getKey(KeyMouse2)) {
+            teclas.put(KeyMouse2, true);
+        }
+        if (getKey(KeyMouse3)) {
+            teclas.put(KeyMouse3, true);
+        }
+        if (getKey(KeyBackspace)) {
+            teclas.put(KeyBackspace, true);
+        }
+        if (getKey(KeyEnter)) {
+            teclas.put(KeyEnter, true);
+        }
+        if (getKey(KeyAlt)) {
+            teclas.put(KeyAlt, true);
+        }
+    }
+
+    public void inicializarTeclas() {
+        teclas = new HashMap<Integer, Boolean>();
+    }
+
+    public boolean isPresionada(int tecla) {
+        return teclas.containsKey(tecla);
     }
 
     public void ventanaDialogo(String[] texto) {
@@ -491,5 +548,195 @@ public class Manager extends JGEngine {
 
     public void setNomNpcInteractuar(String nomNpcInteractuar) {
         this.nomNpcInteractuar = nomNpcInteractuar;
+    }
+
+    public class Ventana {
+
+        private String[] mensajes;
+        private int segundos;
+        private Boolean esAlerta;
+        private String imagen = null;
+        final static byte LINEAS = 3;
+        private int x;
+        private int y;
+        private int linea;
+
+        /**
+         * Muestra una ventana del tipo alerta usada para mostrar mensajes flash
+         *
+         * @param mensaje
+         */
+        public Ventana(String mensaje) {
+            this.x = 255;
+            this.y = 305;
+            this.esAlerta = true;
+            this.segundos = 3;
+            this.desplegarVentana();
+            this.desplegarMensaje(mensaje);
+            this.linea = 0;
+            new JGTimer(
+                    (int) (getFrameRate() * this.getSegundos()), //calculo los frames
+                    true // true indica que la alarma solo se dispara una vez
+                    ) {
+                //método que se debe redefinir para que ejecute una acción
+                //esta vez, desaparecer el objeto ventana
+
+                @Override
+                public void alarm() {
+                }
+            };
+
+        }
+
+        public Ventana(double x, double y, String[] mensajes) {
+            this.mensajes = mensajes;
+            this.x = (int) x;
+            this.y = (int) y;
+            this.linea = 0;
+
+            //remove();
+        }
+
+        /**
+         * despliega una lista de mensajes en fragmetos de 3 líneas
+         * @param mensajes
+         * @param x coordenada X donde se ubica la ventana
+         * @param y coordenada Y donde se ubica la ventana
+         */
+        public void desplegarMensaje(double x, double y, String[] mensajes) {
+            byte separadorLinea = 16;
+            desplegarVentana(x, y);
+            setColor(JGColor.black);
+            setFont(new JGFont("Arial", 0, 10));
+            if (mensajes.length < linea) {
+                desplegarMensaje(x + 60, y + separadorLinea * 1, mensajes[linea]);
+                linea++;
+            }
+            if (mensajes.length < linea) {
+                desplegarMensaje(x + 60, y + separadorLinea * 2, mensajes[linea]);
+                linea++;
+            }
+            if (mensajes.length < linea) {
+                desplegarMensaje(x + 60, y + separadorLinea * 3, mensajes[linea]);
+                linea++;
+            }
+            
+
+        }
+
+        public void avanzarTexto() {
+            if (isPresionada(KeyEnter)) {
+                desplegarMensaje(x, y, mensajes);
+            }
+        }
+
+        private void limpiarVentana(double x, double y) {
+            setColor(JGColor.yellow);
+            drawRect(viewXOfs() + x + 5, viewYOfs() + y + 5, 290, 90, true, false);
+        }
+
+        /**
+         *despliega mensaje en el centro de la pantalla
+         * @param mensaje
+         */
+        public void desplegarMensaje(String mensaje) {
+            setColor(JGColor.red);
+            setFont(new JGFont("Arial", 0, 16));
+            drawString(mensaje, viewWidth() / 2, viewHeight() / 2 + 45, 0);
+        }
+
+        /**
+         * despliega mensaje en la posicion indicada
+         * @param x
+         * @param y
+         * @param mensaje
+         */
+        public void desplegarMensaje(double x, double y, String mensaje) {
+            //eng.setColor(JGColor.red);
+            //eng.setFont(new JGFont("Arial", 0, 16));
+            drawString(mensaje, x, y + 45, 0);
+
+        }
+
+        private void desplegarVentana() {
+            //borde externo
+            setColor(JGColor.red);
+            drawRect(viewXOfs() + 200, viewYOfs() + 250, 300, 100, true, false);
+            //interior
+            setColor(JGColor.white);
+            drawRect(viewXOfs() + 205, viewYOfs() + 255, 290, 90, true, false);
+        }
+
+        private void desplegarVentana(double x, double y) {
+            //borde externo
+            setColor(JGColor.red);
+            drawRect(viewXOfs() + x, viewYOfs() + y, 300, 100, true, false);
+            //interior
+            setColor(JGColor.white);
+            drawRect(viewXOfs() + x + 5, viewYOfs() + y + 5, 290, 90, true, false);
+        }
+
+        //private void
+        /**
+         * Get the url value of imagen
+         *
+         * @return the url value of imagen
+         */
+        public String getImagen() {
+            return imagen;
+        }
+
+        /**
+         * Set the value of imagen
+         *
+         * @param url new url value of imagen
+         */
+        public void setImagen(String url) {
+            this.imagen = url;
+        }
+
+        /**
+         * Get the value of esAlerta
+         *
+         * @return the value of esAlerta
+         */
+        public Boolean getEsAlerta() {
+            return esAlerta;
+        }
+
+        /**
+         * Set the value of esAlerta
+         *
+         * @param esAlerta new value of esAlerta
+         */
+        public void setEsAlerta(Boolean esAlerta) {
+            this.esAlerta = esAlerta;
+        }
+
+        /**
+         * Get the value of segundos
+         *
+         * @return the value of segundos
+         */
+        public int getSegundos() {
+            return segundos;
+        }
+
+        /**
+         * Set the value of segundos
+         *
+         * @param segundos new value of segundos
+         */
+        public void setSegundos(int segundos) {
+            this.segundos = segundos;
+        }
+
+        public String[] getMensajes() {
+            return mensajes;
+        }
+
+        public void setMensajes(String[] mensajes) {
+            this.mensajes = mensajes;
+        }
     }
 }

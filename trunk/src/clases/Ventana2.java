@@ -18,7 +18,7 @@ import jgame.JGTimer;
  *
  * @author gerald
  */
-public class Ventana extends JGObject {
+public class Ventana2 extends JGObject {
 
     private ArrayList<String> mensajes;
     private int segundos;
@@ -31,7 +31,7 @@ public class Ventana extends JGObject {
      * 
      * @param mensaje
      */
-    public Ventana(String mensaje) {
+    public Ventana2(String mensaje) {
         super("alerta", false, +255, +305, 0, "calle");
         this.esAlerta = true;
         this.segundos = 3;
@@ -52,7 +52,7 @@ public class Ventana extends JGObject {
 
     }
 
-    public Ventana(double x, double y, ArrayList<String> mensajes) {
+    public Ventana2(double x, double y, ArrayList<String> mensajes) {
         super("alerta", false, x, y, 0, "calle");
         this.mensajes = mensajes;
         this.x = x;
@@ -91,9 +91,9 @@ public class Ventana extends JGObject {
                     desplegarMensaje(x + 60, y + separadorLinea * contadorLinea, iterador.next().toString());
                     contadorLinea++;
                 }
-                //siguienteTexto = false;
+                siguienteTexto = false;
             }
-//            if (eng.getKey(eng.KeyEnter)) {
+//            if (Manager.) {
 //                siguienteTexto = true;
 //            }
             contadorLinea = 0;
