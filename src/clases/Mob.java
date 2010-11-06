@@ -18,6 +18,12 @@ public class Mob extends Personaje{
     /** chance that object moves randomly */
     public double random_proportion;
     /* state */
+    public double tiempo_espera_original;
+    /* tiempo de espera oeiginal para volver a moverse */
+    public double tiempo_espera;
+    /* tiempo de espera oeiginal para volver a moverse */
+
+
 
     private short vitalidad;
 
@@ -30,8 +36,8 @@ public class Mob extends Personaje{
     private short experiencia;
 
 
-    public Mob(double x, double y, double speed, short idPj, String nombrePj, String graf, short nivelPj, short tipoPj,JGObject home_in,boolean avoid,double random_proportion) /*throws SQLException*/ {
-        super(x, y, speed, idPj, nombrePj, graf, nivelPj, tipoPj);
+    public Mob(double x, double y, double speed, short idPj, String nombrePj, String graf, short nivelPj, short tipoPj,JGObject home_in,boolean avoid,double random_proportion,int cid) /*throws SQLException*/ {
+        super(x, y, speed, idPj, nombrePj, graf, nivelPj, tipoPj, cid);
         this.setIdPersonaje(idPj);
         this.home_in=home_in;
         this.avoid=avoid;
@@ -45,6 +51,7 @@ public class Mob extends Personaje{
 
     @Override
     public void move() {
+
                 if (occupied==null
                 ||  (xspeed==0 && yspeed==0)
                 ||  ( xdir==0 && ydir==0 &&  (!isXAligned() || !isYAligned()) )  ) {
@@ -121,7 +128,8 @@ public class Mob extends Personaje{
 //                                if (ydir >  0 && xdir >  0) setGraphic(gfx_prefix+"dr");
 //                        }
                 }
-        }
+
+    }
         /** Removes object and object's occupation. */
     @Override
         public void destroy() {
