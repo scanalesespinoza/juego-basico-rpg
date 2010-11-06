@@ -12,8 +12,8 @@ public class Jugador extends Personaje {
 
     private short idJugador;
 
-    public Jugador(double x, double y, double speed, short idPj, String nombrePj, String graf, short nivelPj, short tipoPj) throws SQLException {
-        super(x, y, speed, idPj, nombrePj, graf, nivelPj, tipoPj);
+    public Jugador(double x, double y, double speed, short idPj, String nombrePj, String graf, short nivelPj, short tipoPj, int cid) throws SQLException {
+        super(x, y, speed, idPj, nombrePj, graf, nivelPj, tipoPj, cid);
         this.idJugador = idPj;
     }
     private short vitalidad;
@@ -179,7 +179,7 @@ public class Jugador extends Personaje {
 
         remove();
         this.setInteractuarNpc(true);
-        System.out.println("Nombre del objeto colisionador" + getGraphic() + getName());
+        System.out.println("Nombre del objeto colisionador: " + getGraphic() + getName());
 
         this.npcInterac = (Npc) obj;
     }

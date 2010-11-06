@@ -8,6 +8,7 @@ import jgame.JGPoint;
 import jgame.platform.*;
 import java.util.HashMap;
 import jgame.JGTimer;
+import jgame.JGObject;
 
 /**
  *
@@ -44,6 +45,7 @@ public class Manager extends JGEngine {
     public Npc arbol1;
     public Npc arbol2;
     public Npc pileta;
+    public Cursor cursor;
     /*
      * Variables para probar funcionalidad "Realizar Mision"
      */
@@ -94,9 +96,11 @@ public class Manager extends JGEngine {
             defineMedia("/media/rpg-basico.tbl");
             setBGImage("bgimage");
             playAudio("music", "musicaciudad", true);
+            setMouseCursor(pj);
         } catch (Exception ex) {
             System.out.println("Error al cargar medios: " + ex);
         }
+
         new JGTimer(60, false) {
 
             @Override
@@ -112,7 +116,7 @@ public class Manager extends JGEngine {
         //cargaJugador(0,0); reemplazamos por el metodo nuevo
         this.pj = new Jugador();
         this.pj.cargarDatos(this.idJugador);
-        this.mob = new Mob(100, 100, 0.3, (short) 100, "Mario", "mario", (short) 10, (short) 2, null, true, 1);
+        setCursor(null);
         inicializarTeclas();
         try {
 
@@ -141,6 +145,12 @@ public class Manager extends JGEngine {
             arbol1 = new Npc(352, 64, "arbol1", "arbol", 4, 0, (short) 106, new String[]{"Hola amiguirijillo", "soy Don Arbol, cuidame"});//
             arbol2 = new Npc(288, 32, "arbol2", "arbol", 4, 0, (short) 107, new String[]{"Hola amiguirijillo", "soy Don Arbol, cuidame"});//
             pileta = new Npc(128, 64, "arbol2", "pileta", 4, 0, (short) 108, new String[]{"Hola amiguirijillo", "soy la fuente magica"});//
+            cursor = new Cursor();
+            
+            //instancia mob y define como objeto home a pj
+            this.mob = new Mob(100, 300, 1.5, (short) 100, "Mario", "mario", (short) 10, (short) 2, pj, false, 0.5,192);
+
+
 
         } catch (Exception ex) {
             System.out.println("Extrae datos del HashMapsssssssssssssssss: " + ex);
@@ -220,7 +230,6 @@ public class Manager extends JGEngine {
 
     @Override
     public void doFrame() {
-        this.capturarTeclas();
 
         if (((pj.isInteractuarNpc()) && ((getMouseButton(1)) || (getKey(KeyDown)))) || (interactuar > casa1.obtieneDialogo().length)) {
             pj = new Jugador();
@@ -264,7 +273,10 @@ public class Manager extends JGEngine {
                 8 + 1, // cids of objects that our objects should collide with
                 1 // cids of the objects whose hit() should be called
                 );
-
+        checkCollision(
+                192 + 256, // cids of objects that our objects should collide with
+                256 // cids of the objects whose hit() should be called
+                );
         // llamada al metodo de colision entre objeto y escenario con las siguientes id de colision
         checkBGCollision(
                 1 + 11 + 13, // collide with the marble and border tiles
@@ -777,5 +789,34 @@ public class Manager extends JGEngine {
         public void setMensajes(String[] mensajes) {
             this.mensajes = mensajes;
         }
+
     }
+
+	public class Cursor extends JGObject {
+            public Cursor() {
+                    super("cursor",false,0,0,256,"cursor");
+            }
+            int oldmousex=0,oldmousey=0;
+            boolean scissors_c=false;
+            @Override
+            public void move() {
+                    // only follow mouse if it moves
+                    int mx = eng.getMouseX() + eng.viewXOfs();
+                    int my = eng.getMouseY() + eng.viewYOfs();
+                    if (mx!=oldmousex) x=mx;
+                    if (my!=oldmousey) y=my;
+                    oldmousex=mx;
+                    oldmousey=my;
+            }
+
+        @Override
+            public void hit(JGObject obj) {
+                    System.out.println("hit de la banana!");
+                    if ((getMouseButton(1))||(getKey(KeyRight))) {
+                        new Ventana("Soy Mario");
+                        System.out.println("MMMMMMMMMMMMMMMM!");
+                    }
+            }
+    }
+
 }

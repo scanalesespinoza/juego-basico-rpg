@@ -18,7 +18,9 @@ pasto	%	0	/media/imagenes/tiles/pasto_oscuro.png	-
 //define tile bloquedo
 cuadro	!	20	/media/imagenes/tiles/vacio.png	-
 //define mob
-mario	-	50	/media/imagenes/mobs/mario.gif	-
+mario	-	0	/media/imagenes/mobs/mario.gif	-
+//define imagen del cursor
+cursor	-	0	/media/imagenes/menu/banana-con-capa.gif	-
 
 
 //gif-map de 11 cuadros que simulan el desplazar frontal del personaje

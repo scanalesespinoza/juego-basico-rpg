@@ -52,9 +52,9 @@ public class Personaje extends extensiones.StdDungeonPlayerV2 {
     private Encargo misiones;
     private Boolean bloqueo;
 
-    public Personaje(double x, double y, double speed, short idPersonaje, String nombre, String graf, short nivel, short tipo) {
-        super(nombre, x, y, 1, graf, true, false,
-                16, 32, 2.3);
+    public Personaje(double x, double y, double speed, short idPersonaje, String nombre, String graf, short nivel, short tipo, int cid) {
+        super(nombre, x, y, cid, graf, true, false,
+                16, 32, speed);
         stopAnim();
         this.idPersonaje = idPersonaje;
         this.nombre = nombre;
