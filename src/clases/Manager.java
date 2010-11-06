@@ -1,7 +1,5 @@
 package clases;
 
-import java.lang.String;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jgame.JGColor;
@@ -9,8 +7,6 @@ import jgame.JGFont;
 import jgame.JGPoint;
 import jgame.platform.*;
 import java.util.HashMap;
-import java.util.Iterator;
-import jgame.JGObject;
 import jgame.JGTimer;
 
 /**
@@ -140,7 +136,7 @@ public class Manager extends JGEngine {
             casa3 = new Npc(350, 448, "casa3", "casa4", 8, 0, (short) 102, new String[]{"Casa 3"});
             casa4 = new Npc(80, 634, "casa3", "casa3", 8, 0, (short) 103, new String[]{"Casa 3"});
             casa5 = new Npc(350, 682, "casa3", "casa5", 8, 0, (short) 104, new String[]{"Casa 3"});
-            alcaldia = new Npc(700, 75, "alcaldia", "casa4", 8, 0, (short) 105, new String[]{"", "Alcalde: Hola forastero,", "actualemente la cuidad", "tiene muchos problemas,", "por favor ve y ayuda a la gente.", "Usualmente se mantienen", "en sus casas, temerosos", "de salir."});//casa superior
+            alcaldia = new Npc(700, 75, "alcaldia", "casa4", 8, 0, (short) 105, new String[]{ "Alcalde: Hola forastero,", "actualemente la cuidad", "tiene muchos problemas,", "por favor ve y ayuda a la gente.", "Usualmente se mantienen", "en sus casas, temerosos", "de salir."});//casa superior
             //pasto1 = new Npc(192,128,"pasto","pasto",4,0,new String[]{"Hola amiguirijillo","soy pastillo1"});//pasto
             arbol1 = new Npc(352, 64, "arbol1", "arbol", 4, 0, (short) 106, new String[]{"Hola amiguirijillo", "soy Don Arbol, cuidame"});//
             arbol2 = new Npc(288, 32, "arbol2", "arbol", 4, 0, (short) 107, new String[]{"Hola amiguirijillo", "soy Don Arbol, cuidame"});//
@@ -237,7 +233,7 @@ public class Manager extends JGEngine {
             try {
                 casa1 = new Npc(viewXOfs() + 380, viewYOfs() + 120, pj.npcInterac.getNomNpc() + "Npc", pj.npcInterac.getNomNpc() + "Npc", 51, 51, (short) (pj.npcInterac.getIdNpc()), pj.npcInterac.obtieneDialogo());
                 // casa1.realizaTarea(pj);
-                asd = new Ventana(300, 300, textoPrueba);
+                asd = new Ventana(300, 300, casa1.obtieneDialogo());//casa superior);
             } catch (Exception ex) {
                 System.out.println("Extrae datos del HashMap: fsdfsdfsd" + ex);
             }
@@ -316,7 +312,7 @@ public class Manager extends JGEngine {
         if (interactuar > 0) {
             // ventanaDialogo(pj.npcInterac.obtieneDialogo());
             asd.avanzarTexto();
-            interactuar--;
+
         }
 
         //prueba de captura de teclas
@@ -462,7 +458,12 @@ public class Manager extends JGEngine {
     }
 
     public boolean isPresionada(int tecla) {
-        return teclas.containsKey(tecla);
+        if (teclas.containsKey(tecla)) {
+            teclas.put(tecla, false);
+            System.out.println(teclas.get(tecla) + "##############################################################");
+            return true;
+        }
+        return false;
     }
 
     public void ventanaDialogo(String[] texto) {
@@ -559,7 +560,10 @@ public class Manager extends JGEngine {
         final static byte LINEAS = 3;
         private int x;
         private int y;
-        private int linea;
+        private int ventanas = 1;
+        private int ventana_actual;
+        private boolean wait;
+        private JGTimer espera;
 
         /**
          * Muestra una ventana del tipo alerta usada para mostrar mensajes flash
@@ -573,7 +577,6 @@ public class Manager extends JGEngine {
             this.segundos = 3;
             this.desplegarVentana();
             this.desplegarMensaje(mensaje);
-            this.linea = 0;
             new JGTimer(
                     (int) (getFrameRate() * this.getSegundos()), //calculo los frames
                     true // true indica que la alarma solo se dispara una vez
@@ -592,9 +595,18 @@ public class Manager extends JGEngine {
             this.mensajes = mensajes;
             this.x = (int) x;
             this.y = (int) y;
-            this.linea = 0;
 
+            if (mensajes.length % 3 != 0) {
+                this.ventanas = Math.abs(mensajes.length / 3) + 1;
+            } else {
+                this.ventanas = Math.abs(mensajes.length / 3);
+            }
+            this.ventanas++;
+            this.ventana_actual = 1;
             //remove();
+            System.out.println("Ventanas: " + this.ventanas);
+            System.out.println("Ventana_actual: " + this.ventana_actual);
+
         }
 
         /**
@@ -608,24 +620,51 @@ public class Manager extends JGEngine {
             desplegarVentana(x, y);
             setColor(JGColor.black);
             setFont(new JGFont("Arial", 0, 10));
-            if (mensajes.length < linea) {
+            int linea = (ventana_actual - 1) * LINEAS;
+            System.out.println("linea :----------------------- " + linea + " ----------------------------");
+            if (mensajes.length > linea) {
                 desplegarMensaje(x + 60, y + separadorLinea * 1, mensajes[linea]);
                 linea++;
             }
-            if (mensajes.length < linea) {
+            if (mensajes.length > linea) {
                 desplegarMensaje(x + 60, y + separadorLinea * 2, mensajes[linea]);
                 linea++;
             }
-            if (mensajes.length < linea) {
+            if (mensajes.length > linea) {
                 desplegarMensaje(x + 60, y + separadorLinea * 3, mensajes[linea]);
                 linea++;
             }
-            
+            if (espera == null || !espera.running) {
+                System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''''''");
+                espera = new JGTimer(60 * 1, true) {
+                    @Override
+                    public void alarm() {
+                        setWait(false);
+                        System.out.println("mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmmmmm");
+                    }
+                };
+            }
 
         }
 
+        public boolean isWait() {
+            return wait;
+        }
+
+        public void setWait(boolean wait) {
+            this.wait = wait;
+        }
+
         public void avanzarTexto() {
-            if (isPresionada(KeyEnter)) {
+            System.out.println("Ventanas: " + this.ventanas);
+            System.out.println("Ventana_actual: " + this.ventana_actual);
+            if (ventana_actual <= ventanas) {
+                if (getKey(KeyEnter) && !isWait() ) {
+                    setWait(true);
+                    espera = null;
+                    System.out.println("00000000000000000000000000000000000000000000000000000000000");
+                    ventana_actual++;
+                }
                 desplegarMensaje(x, y, mensajes);
             }
         }
